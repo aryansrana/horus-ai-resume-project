@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import router from "./routes/functions";
+import router from "./routes/routes";
 
 dotenv.config();
 
@@ -24,7 +24,9 @@ if (!process.env.MONGO_USERNAME || !process.env.MONGO_PASSWORD || !process.env.M
 
 // Add Function in index.ts?
 
-const dbUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
+const dbUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+//`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
+
 
 mongoose.connect(dbUri)
 .then(() => {
@@ -35,10 +37,10 @@ mongoose.connect(dbUri)
 });
 
 // Routes
-app.use('/api/functions', router);
+app.use('/api', router);
 
 // Root route
-app.get('/api/functions', (request, response) => {
+app.get('/api', (request, response) => {
     response.send("API is running");
 });
 
