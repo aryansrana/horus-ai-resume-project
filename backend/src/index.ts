@@ -24,7 +24,9 @@ if (!process.env.MONGO_USERNAME || !process.env.MONGO_PASSWORD || !process.env.M
 
 // Add Function in index.ts?
 
-const dbUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const dbUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority&appName=Cluster0`
+
+//mongoose.connect('mongodb://username:password@host:port/database?options...');
 //`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
 
 

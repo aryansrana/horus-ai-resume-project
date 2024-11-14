@@ -20,5 +20,5 @@ const resumeSchema = new Schema<IResume>({
 
 // Create the Mongoose model using the schema
 const Resume = mongoose.model<IResume>('Resume', resumeSchema);
-
+//await Resume.createCollection();
 export { IResume, Resume };
