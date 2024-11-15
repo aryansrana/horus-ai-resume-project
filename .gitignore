@@ -1,4 +1,4 @@
-dist/
-node_modules/
-tsconfig.tsbuildinfo
-.env
+backend/dist/
+backend/node_modules/
+backend/tsconfig.tsbuildinfo
+backend/.env
