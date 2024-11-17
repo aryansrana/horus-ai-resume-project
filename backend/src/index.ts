@@ -1,17 +1,9 @@
-import express from "express";
-import cors from "cors";
+import { createApp } from "./createApp";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import router from "./routes/routes";
 
 dotenv.config();
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
+const app = createApp();
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB using Mongoose
@@ -38,8 +30,6 @@ mongoose.connect(dbUri)
     console.error("MongoDB connection error:", error);
 });
 
-// Routes
-app.use('/api', router);
 
 // Root route
 app.get('/api', (request, response) => {
