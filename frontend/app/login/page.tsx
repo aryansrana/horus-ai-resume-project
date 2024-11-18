@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,7 +7,7 @@ import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -15,7 +16,7 @@ const loginSchema = z.object({
 
 export default function Login() {
   const [error, setError] = useState('')
-  const navigate = useNavigate()
+  const router = useRouter()
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,8 +29,9 @@ export default function Login() {
     try {
       const response = await axios.post('/api/login', values)
       localStorage.setItem('token', response.data.token)
-      navigate('/dashboard')
+      router.push('/dashboard')
     } catch (err) {
+      console.error(err);
       setError('Login failed. Please check your credentials.')
     }
   }
