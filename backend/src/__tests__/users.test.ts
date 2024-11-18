@@ -1,5 +1,5 @@
 import request from "supertest";
-import { type Express } from "express";
+import { Express } from "express";
 import { createApp } from "../createApp";
 import { User } from "../models/users";
 import mongoose from "mongoose";
@@ -35,23 +35,31 @@ describe("/api", () => {
                     "username": "user123"
                   })
                 .expect(201);
-            expect(response.body.result).toStrictEqual({"message": "User registered successfully"})
+            expect(response.body).toStrictEqual({"message": "User registered successfully"})
         });
-
-    
-        it('register duplicate user', async () => {
+        it('register duplicate email', async () => {
             const response = await request(app)
                 .post('/api/register')
                 .send({
                     "email": "user@example.com",
                     "password": "securePassword",
+                    "username": "seconduser123"
+                  })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Email already in use"})
+        });
+        it('register duplicate username', async () => {
+            const response = await request(app)
+                .post('/api/register')
+                .send({
+                    "email": "user2@example.com",
+                    "password": "securePassword",
                     "username": "user123"
                   })
                 .expect(400);
-            expect(response.body.result).toStrictEqual({"error": "Email already in use"})
+            expect(response.body).toStrictEqual({"error": "Username already in use"})
         });
-    
-        it('register incomplete user', async () => {
+        it('register missing password', async () => {
             const response = await request(app)
                 .post('/api/register')
                 .send({
@@ -60,20 +68,74 @@ describe("/api", () => {
                     "username": "user123"
                   })
                 .expect(400);
-            expect(response.body.result).toStrictEqual({"error": "Missing required fields."})
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
         });
-
+        it('register missing email', async () => {
+            const response = await request(app)
+                .post('/api/register')
+                .send({
+                    "email": "",
+                    "password": "securepassword",
+                    "username": "user123"
+                  })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
+        });
+        it('register missing username', async () => {
+            const response = await request(app)
+                .post('/api/register')
+                .send({
+                    "email": "user@example.com",
+                    "password": "securepassword",
+                    "username": ""
+                  })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
+        });
+        it('register empty fields', async () => {
+            const response = await request(app)
+                .post('/api/register')
+                .send({
+                    "email": "",
+                    "password": "",
+                    "username": ""
+                  })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
+        });
     });
-
     describe("/login", () => {
         it('login user', async () => {
             const response = await request(app)
                 .post('/api/login')
                 .send({ "email": "user@example.com", "password": "securePassword" })
-                .expect(201);
-            expect(response.body.result).toStrictEqual({
-                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzNhNjg4ODNkZDJiYzlkNmNiODZkYjkiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzE4ODY2NTMsImV4cCI6MTczMTg5MDI1M30.PFmIoh1rVuoUfRZulvzGMdDqhj0pGMfhBNDF1BSu6u4"
-            })
+                .expect(200);
+            expect(response.body).toHaveProperty('token');
+            const token = response.body.token;
+            expect(token).toMatch(
+            /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/
+            );
+        });
+        it('login missing email', async () => {
+            const response = await request(app)
+                .post('/api/login')
+                .send({ "email": "", "password": "securePassword" })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
+        });
+        it('login missing password', async () => {
+            const response = await request(app)
+                .post('/api/login')
+                .send({ "email": "user@example.com", "password": "" })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
+        });
+        it('login empty fields', async () => {
+            const response = await request(app)
+                .post('/api/login')
+                .send({ "email": "", "password": "" })
+                .expect(400);
+            expect(response.body).toStrictEqual({"error": "Missing required fields."})
         });
     })
 })

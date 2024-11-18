@@ -6,11 +6,14 @@ class UserService {
     static async register(email: string, password: string, username: string) {
         try {
             // Check if the email already exists in the database
-            const existingUser = await User.findOne({ email });
-            if (existingUser) {
+            const existingEmail = await User.findOne({ email });
+            if (existingEmail) {
                 throw new Error('Email already in use');
             }
-
+            const existingUser = await User.findOne({ username });
+            if (existingUser) {
+                throw new Error ('Username already in use');
+            }
             // Hash the password using bcrypt
             const hashedPassword = await bcrypt.hash(password, 10); // 10 rounds of hashing
 
