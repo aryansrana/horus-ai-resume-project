@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,7 +7,7 @@ import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -20,7 +21,7 @@ const signUpSchema = z.object({
 
 export default function SignUp() {
   const [error, setError] = useState('')
-  const navigate = useNavigate()
+  const router = useRouter()
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -38,8 +39,9 @@ export default function SignUp() {
         username: values.username,
         password: values.password,
       })
-      navigate('/login')
+      router.push('/login')
     } catch (err) {
+      console.error(err);
       setError('Registration failed. Please try again.')
     }
   }

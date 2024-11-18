@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
@@ -39,6 +40,7 @@ export default function ResumeUpload() {
       setSuccess('Resume uploaded successfully')
       setError('')
     } catch (err) {
+      console.error(err);
       setError('Failed to upload resume. Please try again.')
       setSuccess('')
     }

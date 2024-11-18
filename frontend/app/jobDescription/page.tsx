@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -30,6 +31,7 @@ export default function JobDescription() {
       setSuccess('Job description submitted successfully')
       setError('')
     } catch (err) {
+      console.error(err);
       setError('Failed to submit job description. Please try again.')
       setSuccess('')
     }

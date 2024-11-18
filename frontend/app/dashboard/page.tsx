@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Progress } from '@/components/ui/progress'
@@ -22,6 +23,7 @@ export default function Dashboard() {
         })
         setAnalysisResult(response.data)
       } catch (err) {
+        console.error(err);
         setError('Failed to fetch analysis result')
       } finally {
         setLoading(false)
