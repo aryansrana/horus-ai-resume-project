@@ -1,51 +1,55 @@
 import { Resume } from "../models/resumes";
-import { Document, Schema } from 'mongoose';
 import pdfParse from 'pdf-parse';
+import mammoth from "mammoth";
 
 
 class ResumeService {
     static async resume_upload(resume_file: Express.Multer.File) {
         try {
-            // Validate file type (Only PDF or DOCX are allowed)
-            const allowedMimeTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            if (!allowedMimeTypes.includes(resume_file.mimetype)) {
-                return { status: 'error', message: 'Invalid file type. Only PDF or DOCX files are allowed.' };
-            }
+            const newResume = new Resume({
+                fileName: resume_file.originalname,
+                data: resume_file.buffer,
+                contentType: resume_file.mimetype,
+            });
 
-            // Validate file size (Max 2MB)
-            const maxSize = 2 * 1024 * 1024; // 2MB
-            if (resume_file.size > maxSize) {
-                return { status: 'error', message: 'File size exceeds the 2MB limit.' };
-            }
+            await newResume.save();
 
-            // Process PDF file (if it's a PDF)
-            if (resume_file.mimetype === 'application/pdf') {
-                const pdfData = await pdfParse(resume_file.buffer);
-                // You can extract text or other data from the PDF if needed
-                console.log(pdfData.text); // Just for logging the extracted text
-            }
-
-            // Process DOCX file (if it's a DOCX) - you can use libraries like 'mammoth' or 'docxtemplater'
-            if (resume_file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                // Process DOCX file (Add processing logic as needed)
-            }
-
-            // For now, returning success as we don't store the file in DB
-            return { status: 'success', message: 'Resume uploaded successfully.' };
+            return { message: "Resume uploaded successfully.", status: "success" };
         } catch (error) {
-            return { status: 'error', message: (error as Error).message };
+            throw new Error((error as Error).message || 'Error during resume upload');
         }
     }
-
-    static async job_description(job_description: string) {
+    // Holding off on making endpoint for this function for now, unsure of whether to use in frontend or backend
+    static async extract_text_from_resume(resumeId: string) {
         try {
-            // Clean up and trim the job description text
-            const cleanedDescription = job_description.trim();
+            // Retrieve resume from MongoDB
+            const resume = await Resume.findById(resumeId);
 
-            // Additional validation or processing could go here if needed
-            return { status: 'success', message: 'Job description submitted successfully.' };
+            if (!resume) {
+                throw new Error("Resume not found.");
+            }
+
+            const { data, contentType } = resume;
+
+            // Ensure data exists
+            if (!data || !contentType) {
+                throw new Error("Invalid resume data.");
+            }
+
+            // Convert binary data back to plain text based on contentType
+            if (contentType === "application/pdf") {
+                const pdfData = await pdfParse(data);
+                return { text: pdfData.text, status: "success" };
+            }
+
+            if (contentType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                const result = await mammoth.extractRawText({ buffer: data });
+                return { text: result.value, status: "success" };
+            }
+
+            throw new Error("Unsupported file type.");
         } catch (error) {
-            return { status: 'error', message: (error as Error).message };
+            throw new Error((error as Error).message || "Error during resume text extraction");
         }
     }
 }

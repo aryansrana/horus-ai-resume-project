@@ -1,7 +1,11 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
 module.exports = {
-    testEnvironment: "node",
-    transform: {
-      "^.+.tsx?$": ["ts-jest",{}],
-    },
-  };
+  // Only match test files in the 'dist' directory
+  testMatch: ["**/dist/**/*.test.js"],
+
+  // Ignore source files and node_modules
+  testPathIgnorePatterns: ["/node_modules/", "/src/"],
+
+  // Use Node environment
+  testEnvironment: "node",
+};

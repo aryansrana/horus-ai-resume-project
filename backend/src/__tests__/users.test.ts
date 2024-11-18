@@ -14,7 +14,7 @@ describe("/api", () => {
         const dbUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0`
         mongoose.connect(dbUri)
         .then(() => {
-            console.log("Connected to MongoDB successfully");
+            //console.log("Connected to MongoDB successfully");
         })
         .catch((error) => {
             console.error("MongoDB connection error:", error);
