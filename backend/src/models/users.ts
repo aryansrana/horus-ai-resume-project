@@ -32,5 +32,5 @@ const userSchema = new Schema<IUser>({
 
 // Create and export the User model
 const User = mongoose.model<IUser>('User', userSchema);
-//await User.createCollection();
+
 export { IUser, User };
