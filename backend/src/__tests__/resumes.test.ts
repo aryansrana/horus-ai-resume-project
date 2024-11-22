@@ -28,13 +28,24 @@ describe("/api", () => {
       }); 
 
     describe("/resume", () =>{
-        it('insert into database', async () => {
+        it('insert into database pdf', async () => {
             const filePath = path.resolve(__dirname, 'testFiles', 'file1.pdf');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
                 .attach('resume_file', file, 'file1.pdf')
+                .expect(200)
+            expect(response.body).toStrictEqual({ message: 'Resume uploaded successfully.', status: 'success' })
+        });
+        
+        it('insert into database docx', async () => {
+            const filePath = path.resolve(__dirname, 'testFiles', 'file2.docx');
+            const file = fs.readFileSync(filePath)
+            const response = await request(app)
+                .post('/api/resume-upload')
+                .set('Content-Type', 'multipart/form-data')
+                .attach('resume_file', file, 'file2.docx')
                 .expect(200)
             expect(response.body).toStrictEqual({ message: 'Resume uploaded successfully.', status: 'success' })
         });
@@ -72,12 +83,12 @@ describe("/api", () => {
         })
 
         it('file is too big', async () =>{
-            const filePath = path.resolve(__dirname, 'testFiles', 'test.txt');
+            const filePath = path.resolve(__dirname, 'testFiles', 'largeFile.pdf');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
-                .attach('resume_file', file, 'test.txt')
+                .attach('resume_file', file, 'largeFile.pdf')
                 .expect(500)
         })
 

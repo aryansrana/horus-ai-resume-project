@@ -4,7 +4,6 @@ import ResumeService from '../services/resumes';
 class ResumeHandler {
     static async resume_upload(req: Request, res: Response) {
         try {
-            console.log(req.file?.mimetype)
             const resume_file = req.file;
             if (!resume_file) {
                 res.status(400).json({ error: 'No file uploaded.', status: 'error' });
