@@ -34,8 +34,39 @@ describe("/api", () => {
                     "job_description": "This Job ..."
                 })
                 .expect(200)
-            expect(200)
+            expect(response.body).toStrictEqual({"message": "Job description submitted successfully.", "status": "success"})
         });
+
+        it('check type', async () =>{
+            const response = await request(app)
+                .post('/api/job-description')
+                .send({
+                    "job_description": 35
+                })
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Invalid job description.'})
+        } )
+
+        it ('invalid length', async () =>{
+            const response = await request(app)
+                .post('/api/job-description')
+                .send({
+                    "job_description" : "abcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrst"
+                })
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Job description exceeds character limit of 5000.' })
+        })
+        
+        it ('empty description', async () =>{
+            const response = await request(app)
+                .post('/api/job-description')
+                .send({
+                    "job_description" : ""
+                })
+                .expect(400)
+            expect(response.body).toStrictEqual( { error: 'Invalid job description.' })
+        })
     })
+
     
 })
