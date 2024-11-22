@@ -26,10 +26,10 @@ router.post('/register', UserHandler.register);
 
 router.post('/login', UserHandler.login);
 
-// Resume upload endpoint
 router.post('/resume-upload', upload.single('resume_file'), ResumeHandler.resume_upload);
 
-// Job description endpoint
 router.post('/job-description', DescriptionHandler.job_description);
+
+router.get('/resume', ResumeHandler.get_resume)
 
 export default router;
