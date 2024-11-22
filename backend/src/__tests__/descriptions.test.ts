@@ -4,13 +4,16 @@ import { createApp } from "../createApp";
 import {Description} from "../models/descriptions"
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
+
+
 
 
 describe("/api", () => {
     let app : Express;
     beforeAll(() => {
         app = createApp();
-        dotenv.config();
+        dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
         const dbUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.gsref.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0`
         mongoose.connect(dbUri)
         .then(() => {

@@ -20,10 +20,10 @@ class ResumeService {
         }
     }
     // Holding off on making endpoint for this function for now, unsure of whether to use in frontend or backend
-    static async extract_text_from_resume(resumeId: string) {
+    static async extract_text_from_resume(resume_name: string) {
         try {
             // Retrieve resume from MongoDB
-            const resume = await Resume.findById(resumeId);
+            const resume = await Resume.findOne({fileName : resume_name});
 
             if (!resume) {
                 throw new Error("Resume not found.");
@@ -39,12 +39,12 @@ class ResumeService {
             // Convert binary data back to plain text based on contentType
             if (contentType === "application/pdf") {
                 const pdfData = await pdfParse(data);
-                return { text: pdfData.text, status: "success" };
+                return pdfData.text;
             }
 
             if (contentType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                 const result = await mammoth.extractRawText({ buffer: data });
-                return { text: result.value, status: "success" };
+                return result;
             }
 
             throw new Error("Unsupported file type.");

@@ -37,13 +37,14 @@ class UserService {
             // Check if the user exists in the database
             const user = await User.findOne({ email });
             if (!user) {
-                throw new Error('Invalid email or password');
+                throw new Error('Invalid email.');
             }
 
             // Compare the provided password with the hashed password in the database
+            
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                throw new Error('Invalid email or password');
+                throw new Error('Invalid password');
             }
 
             // Generate a JWT token with an expiration of 1 hour
