@@ -29,7 +29,7 @@ describe("/api", () => {
 
     describe("/resume", () =>{
         it('insert into database pdf', async () => {
-            const filePath = path.resolve(__dirname, 'testFiles', 'file1.pdf');
+            const filePath = path.resolve("./src/__tests__/", "testFiles", "file1.pdf");
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
@@ -40,7 +40,7 @@ describe("/api", () => {
         });
         
         it('insert into database docx', async () => {
-            const filePath = path.resolve(__dirname, 'testFiles', 'file2.docx');
+            const filePath = path.resolve("./src/__tests__/", 'testFiles', 'file2.docx');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
@@ -51,7 +51,7 @@ describe("/api", () => {
         });
 
         it('general error', async () => {
-            const filePath = path.resolve(__dirname, 'testFiles', 'file1.pdf');
+            const filePath = path.resolve("./src/__tests__/", 'testFiles', 'file1.pdf');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
@@ -62,7 +62,7 @@ describe("/api", () => {
         });
 
         it('no file', async () => {
-            const filePath = path.resolve(__dirname, 'testFiles', 'file1.pdf');
+            const filePath = path.resolve("./src/__tests__/", 'testFiles', 'file1.pdf');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
@@ -73,7 +73,7 @@ describe("/api", () => {
         });
 
         it('wrong file type', async () =>{
-            const filePath = path.resolve(__dirname, 'testFiles', 'test.txt');
+            const filePath = path.resolve("./src/__tests__/", 'testFiles', 'test.txt');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
@@ -83,7 +83,7 @@ describe("/api", () => {
         })
 
         it('file is too big', async () =>{
-            const filePath = path.resolve(__dirname, 'testFiles', 'largeFile.pdf');
+            const filePath = path.resolve("./src/__tests__/", 'testFiles', 'largeFile.pdf');
             const file = fs.readFileSync(filePath)
             const response = await request(app)
                 .post('/api/resume-upload')
