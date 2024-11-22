@@ -58,6 +58,7 @@ Check package.json for other scripts
 Move into the frontend directory, instructions below assuming you're in backend
 ```bash
 cd ../frontend
+npm run build
 npm run start
 ```
 ## Step 6: Use app
