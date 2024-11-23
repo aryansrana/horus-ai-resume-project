@@ -58,7 +58,6 @@ describe("/api", () => {
                 .set('Content-Type', 'multipart/form-data')
                 .attach('resume_file', Buffer.alloc(0), 'file1.pdf')
                 .expect(500)
-            
         });
 
         it('no file', async () => {
@@ -79,7 +78,7 @@ describe("/api", () => {
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
                 .attach('resume_file', file, 'test.txt')
-                .expect(500)
+                .expect(400)
         })
 
         it('file is too big', async () =>{
@@ -89,7 +88,7 @@ describe("/api", () => {
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
                 .attach('resume_file', file, 'largeFile.pdf')
-                .expect(500)
+                .expect(400)
         })
 
 
