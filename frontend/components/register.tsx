@@ -46,9 +46,8 @@ export function Register({}/*: RegisterProps*/) {
           'Content-Type': 'application/json',
         },
       })
-      if (response.status === 201 && response.data.token) {
-        Cookies.set('token', response.data.token, { expires: 7 }) // Set cookie to expire in 7 days
-        router.push('/dashboard')
+      if (response.status === 201) {
+        router.push('/login')
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
