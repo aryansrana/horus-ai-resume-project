@@ -7,6 +7,7 @@ class UserHandler {
             const { email, password, username } = req.body;
             if (!email || !password || !username) {
                 res.status(400).json({ error: 'Missing required fields.' });
+                console.log("Missing fields")
                 return;
             }
 
@@ -15,6 +16,7 @@ class UserHandler {
             return;
         } catch (error) {
             res.status(400).json({ error: (error as Error).message });
+            console.log((error as Error).message )
             return;
         }
     }
