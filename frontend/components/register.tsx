@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { SignUpProps, SignUpFormData } from "@/app/types/auth"
+import { /*RegisterProps,*/ RegisterFormData } from "@/app/types/auth"
 
-export function SignUp({}: SignUpProps) {
-  const [formData, setFormData] = useState<SignUpFormData>({
+export function Register({} /*: RegisterProps*/) {
+  const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     username: '',
     password: '',
@@ -54,14 +54,14 @@ export function SignUp({}: SignUpProps) {
       } else {
         setError('An unexpected error occurred. Please try again.')
       }
-      console.error('Signup error:', err)
+      console.error('Register error:', err)
     }
   }
 
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Sign Up</CardTitle>
+        <CardTitle>Register</CardTitle>
         <CardDescription>Create a new account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -90,7 +90,7 @@ export function SignUp({}: SignUpProps) {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full mt-4">Sign Up</Button>
+          <Button type="submit" className="w-full mt-4">Register</Button>
         </form>
       </CardContent>
     </Card>
