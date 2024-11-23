@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {/* LoginProps, */LoginFormData } from "@/app/types/auth"
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 export function Login({}/*: LoginProps*/) {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -36,7 +37,11 @@ export function Login({}/*: LoginProps*/) {
         },
       })
       if (response.data.token) {
-        Cookies.set('token', response.data.token, { expires: 7 }) // Set cookie to expire in 7 days
+        const decodedToken: { exp: number } = jwtDecode(response.data.token);
+        const expirationDate = new Date(decodedToken.exp * 1000); // Convert exp (seconds) to milliseconds
+        // Set the cookie with the expiration date
+        Cookies.set('token', response.data.token, { expires: expirationDate });
+        
         router.push('/dashboard')
       }
     } catch (err) {
