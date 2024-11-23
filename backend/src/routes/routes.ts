@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import UserHandler from '../handlers/users';
 import ResumeHandler from '../handlers/resumes';
@@ -22,11 +22,51 @@ const upload = multer({
     },
 });
 
+function multerErrorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
+    const allowedMimeTypes = [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+
+    // Handle Multer errors
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            res.status(400).json({
+                error: 'File size exceeds the 2MB limit.',
+                status: 'error',
+            });
+            return;
+        }
+    }
+
+    // Handle missing file
+    if (!req.file) {
+        res.status(400).json({
+            error: 'No file uploaded.',
+            status: 'error',
+        });
+        return;
+    }
+
+    // Handle invalid file type
+    if (!allowedMimeTypes.includes(req.file.mimetype)) {
+        res.status(400).json({
+            error: 'Invalid file type. Only PDF or DOCX files are allowed.',
+            status: 'error',
+        });
+        return;
+    }
+
+    // If no issues, pass to the next middleware
+    next();
+}
+
+
 router.post('/register', UserHandler.register);
 
 router.post('/login', UserHandler.login);
 
-router.post('/resume-upload', upload.single('resume_file'), ResumeHandler.resume_upload);
+router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
 
 router.post('/job-description', DescriptionHandler.job_description);
 
