@@ -49,7 +49,7 @@ class UserService {
 
             // Generate a JWT token with an expiration of 1 hour
             const token = jwt.sign(
-                { userId: user._id, email: user.email },
+                { userId: user._id, email: user.email, username : user.username },
                 process.env.JWT_SECRET || 'default_secret', // Store the secret in .env for security
                 { expiresIn: '1h' }
             );
