@@ -1,33 +1,9 @@
-'use client'
+import { Dashboard } from "@/components/dashboard"
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-
-export default function Dashboard() {
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    console.log('Token in dashboard:', token)
-    if (!token) {
-      console.log('No token found, redirecting to login')
-      router.push('/login')
-    } else {
-      console.log('Token found, loading dashboard')
-      setIsLoading(false)
-    }
-  }, [router])
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
+export default function DashboardPage() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome to your protected dashboard!</p>
+    <div className="flex justify-center items-center min-h-screen">
+      <Dashboard />
     </div>
   )
 }
-
