@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { LoginProps, LoginFormData } from "@/app/types/auth"
+import { /*LoginProps,*/ LoginFormData } from "@/app/types/auth"
 
-export function Login({}: LoginProps) {
+export function Login({}/*: LoginProps*/) {
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
