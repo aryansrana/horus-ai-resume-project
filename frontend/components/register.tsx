@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { /*RegisterProps,*/ RegisterFormData } from "@/app/types/auth"
-import Cookies from 'js-cookie'
 
 export function Register({}/*: RegisterProps*/) {
   const [formData, setFormData] = useState<RegisterFormData>({

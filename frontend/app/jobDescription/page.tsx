@@ -13,8 +13,10 @@ import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
 
 interface DecodedToken {
+  userId : string;
+  email : string;
+  username : string;
   exp: number;
-  [key: string]: any;
 }
 
 const jobDescriptionSchema = z.object({
@@ -71,7 +73,7 @@ export default function JobDescription() {
   const onSubmit = async (values: z.infer<typeof jobDescriptionSchema>) => {
     try {
       await axios.post('/api/job-description', values, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Content-Type': 'application/json'}
       })
       setSuccess('Job description submitted successfully')
       setError('')
