@@ -6,12 +6,13 @@ import * as z from 'zod'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Form, FormControl, FormField, FormItem, /*FormLabel,*/ FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
+import { Loader2 } from 'lucide-react'
 
 interface DecodedToken {
   userId : string;
@@ -27,14 +28,16 @@ const jobDescriptionSchema = z.object({
 export default function JobDescription() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof jobDescriptionSchema>>({
     resolver: zodResolver(jobDescriptionSchema),
     defaultValues: {
       job_description: '',
     },
   })
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     const validateToken = () => {
@@ -68,10 +71,9 @@ export default function JobDescription() {
   if (isLoading) {
     return <div>Loading...</div>
   }
-  
-
 
   const onSubmit = async (values: z.infer<typeof jobDescriptionSchema>) => {
+    setIsSubmitting(true)
     try {
       await axios.post('http://localhost:8080/api/job-description', values, {
         headers: { 'Content-Type': 'application/json'}
@@ -82,6 +84,8 @@ export default function JobDescription() {
       console.error(err);
       setError('Failed to submit job description. Please try again.')
       setSuccess('')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -117,15 +121,23 @@ export default function JobDescription() {
                 </FormItem>
               )}
             />
-            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-              <span className="text-sm text-gray-500">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <span className="text-sm text-gray-500 w-full sm:w-auto text-center sm:text-left">
                 {form.watch('job_description').length}/5000 characters
               </span>
               <Button 
                 type="submit" 
+                disabled={isSubmitting}
                 className="w-full sm:w-auto bg-[#9c8679] hover:bg-[#8a7668] text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#9c8679] focus:ring-opacity-50"
               >
-                Submit
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit'
+                )}
               </Button>
             </div>
           </form>
@@ -146,3 +158,4 @@ export default function JobDescription() {
     </div>
   )
 }
+

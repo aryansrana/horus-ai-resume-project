@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
+import { Loader2 } from 'lucide-react'
 
 interface DecodedToken {
   userId : string;
@@ -21,8 +22,8 @@ export default function ResumeUpload() {
   const [file, setFile] = useState<File | null>(null)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function ResumeUpload() {
     event.preventDefault()
     if (!file) return
 
+    setIsSubmitting(true)
     const formData = new FormData()
     formData.append('resume_file', file)
 
@@ -90,6 +92,8 @@ export default function ResumeUpload() {
       console.error(err);
       setError('Failed to upload resume. Please try again.')
       setSuccess('')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -108,7 +112,7 @@ export default function ResumeUpload() {
       <div className="w-full max-w-md bg-white bg-opacity-90 p-6 sm:p-8 rounded-lg shadow-lg backdrop-blur-sm z-10">
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-[#9c8679]">Upload Resume</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
+          <div className="relative flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
             <Input
               type="file"
               accept=".pdf"
@@ -118,20 +122,27 @@ export default function ResumeUpload() {
             />
             <label
               htmlFor="file-upload"
-              className="cursor-pointer inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 text-sm sm:text-base border border-[#9c8679] text-[#9c8679] rounded-md hover:bg-[#9c8679] hover:text-white transition-colors duration-300"
+              className="cursor-pointer inline-flex items-center px-3 py-2 text-sm border border-[#9c8679] text-[#9c8679] rounded-md hover:bg-[#9c8679] hover:text-white transition-colors duration-300 w-full sm:w-auto justify-center"
             >
               Choose File
             </label>
-            <span className="ml-3 text-xs sm:text-sm text-gray-700 break-all">
+            <span className="text-xs sm:text-sm text-gray-700 truncate max-w-full">
               {file ? file.name : 'No file chosen'}
             </span>
           </div>
           <Button 
             type="submit" 
-            disabled={!file}
+            disabled={!file || isSubmitting}
             className="w-full bg-[#9c8679] hover:bg-[#8a7668] text-white transition-colors duration-300"
           >
-            Upload Resume
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              'Upload Resume'
+            )}
           </Button>
         </form>
         {error && (
@@ -150,3 +161,4 @@ export default function ResumeUpload() {
     </div>
   )
 }
+
