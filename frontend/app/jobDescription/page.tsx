@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -20,7 +21,7 @@ interface DecodedToken {
 }
 
 const jobDescriptionSchema = z.object({
-  jobDescription: z.string().min(1).max(5000),
+  job_description: z.string().min(1).max(5000),
 })
 
 export default function JobDescription() {
@@ -29,7 +30,7 @@ export default function JobDescription() {
   const form = useForm<z.infer<typeof jobDescriptionSchema>>({
     resolver: zodResolver(jobDescriptionSchema),
     defaultValues: {
-      jobDescription: '',
+      job_description: '',
     },
   })
   const [isLoading, setIsLoading] = useState(true)
@@ -72,7 +73,7 @@ export default function JobDescription() {
 
   const onSubmit = async (values: z.infer<typeof jobDescriptionSchema>) => {
     try {
-      await axios.post('/api/job-description', values, {
+      await axios.post('http://localhost:8080/api/job-description', values, {
         headers: { 'Content-Type': 'application/json'}
       })
       setSuccess('Job description submitted successfully')
@@ -85,47 +86,63 @@ export default function JobDescription() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-4">Job Description</h2>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="jobDescription"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Enter job description here..."
-                    className="h-32"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">
-              {form.watch('jobDescription').length}/5000 characters
-            </span>
-            <Button type="submit">Submit</Button>
-          </div>
-        </form>
-      </Form>
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {success && (
-        <Alert className="mt-4">
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{success}</AlertDescription>
-        </Alert>
-      )}
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center relative p-4 sm:p-6 md:p-8 lg:p-12" style={{ backgroundImage: "url('/images/background.jpg')" }}>
+      <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/50 backdrop-blur-sm"></div>
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 lg:top-12 lg:left-12 z-10">
+        <Image
+          src="/images/goofyahh.png"
+          alt="Company Logo"
+          width={128}
+          height={128}
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain transition-transform duration-300 hover:scale-110"
+        />
+      </div>
+      <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl bg-white bg-opacity-90 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg backdrop-blur-sm z-10 transition-all duration-300 hover:shadow-xl">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8 text-[#9c8679] transition-colors duration-300 hover:text-[#8a7668]">Job Description</h2>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+            <FormField
+              control={form.control}
+              name="job_description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter job description here..."
+                      className="h-32 md:h-40 lg:h-48 border-[#9c8679] focus:ring-[#9c8679] focus:border-[#9c8679] transition-all duration-300 hover:border-[#8a7668]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+              <span className="text-sm text-gray-500">
+                {form.watch('job_description').length}/5000 characters
+              </span>
+              <Button 
+                type="submit" 
+                className="w-full sm:w-auto bg-[#9c8679] hover:bg-[#8a7668] text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#9c8679] focus:ring-opacity-50"
+              >
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+        {error && (
+          <Alert variant="destructive" className="mt-4 border-red-500 bg-red-50 text-red-700 transition-all duration-300 hover:bg-red-100">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        {success && (
+          <Alert className="mt-4 border-[#9c8679] bg-[#9c8679] bg-opacity-10 text-[#9c8679] transition-all duration-300 hover:bg-opacity-20">
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>{success}</AlertDescription>
+          </Alert>
+        )}
+      </div>
     </div>
   )
 }
