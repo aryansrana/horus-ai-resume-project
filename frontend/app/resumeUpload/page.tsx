@@ -1,17 +1,61 @@
 'use client';
 
-import { useState } from 'react'
 import axios from 'axios'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { jwtDecode } from "jwt-decode"
+import Cookies from 'js-cookie'
+
+interface DecodedToken {
+  exp: number;
+  [key: string]: any;
+}
 
 export default function ResumeUpload() {
   const [file, setFile] = useState<File | null>(null)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
+
+  useEffect(() => {
+    const validateToken = () => {
+      const token = Cookies.get('token')
+      if (!token) {
+        router.push('/login')
+        return
+      }
+
+      try {
+        const decodedToken = jwtDecode(token) as DecodedToken
+        const currentTime = Date.now() / 1000
+
+        if (decodedToken.exp < currentTime) {
+          // Token has expired
+          Cookies.remove('token')
+          router.push('/login')
+        } else {
+          setIsLoading(false)
+        }
+      } catch (error) {
+        console.error('Invalid token:', error)
+        Cookies.remove('token')
+        router.push('/login')
+      }
+    }
+
+    validateToken()
+  }, [router])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0]
     if (selectedFile) {

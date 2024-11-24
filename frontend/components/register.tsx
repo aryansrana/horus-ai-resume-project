@@ -3,14 +3,16 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { /*RegisterProps,*/ RegisterFormData } from "@/app/types/auth"
+import Cookies from 'js-cookie'
 
-export function Register({} /*: RegisterProps*/) {
+export function Register({}/*: RegisterProps*/) {
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     username: '',
@@ -49,19 +51,18 @@ export function Register({} /*: RegisterProps*/) {
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        console.log(err)
-        setError(err.response.data.error || 'Failed to sign up. Please try again.')
+        setError(err.response.data.error || 'Failed to register. Please try again.')
       } else {
         setError('An unexpected error occurred. Please try again.')
       }
-      console.error('Register error:', err)
+      console.error('Registration error:', err)
     }
   }
 
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Register</CardTitle>
+        <CardTitle>register</CardTitle>
         <CardDescription>Create a new account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -90,9 +91,17 @@ export function Register({} /*: RegisterProps*/) {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full mt-4">Register</Button>
+          <Button type="submit" className="w-full mt-4">register</Button>
         </form>
       </CardContent>
+      <CardFooter className="flex justify-center">
+        <p className="text-sm text-muted-foreground">
+          Already have an account? {' '}
+          <Link href="/login" className="text-primary hover:underline">
+            login
+          </Link>
+        </p>
+      </CardFooter>
     </Card>
   )
 }

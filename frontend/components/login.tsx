@@ -3,12 +3,15 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { /*LoginProps,*/ LoginFormData } from "@/app/types/auth"
+import {/* LoginProps, */LoginFormData } from "@/app/types/auth"
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 export function Login({}/*: LoginProps*/) {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -28,9 +31,17 @@ export function Login({}/*: LoginProps*/) {
     setError('')
 
     try {
-      const response = await axios.post('http://localhost:8080/api/login', formData)
+      const response = await axios.post('http://localhost:8080/api/login', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token)
+        const decodedToken: { exp: number } = jwtDecode(response.data.token);
+        const expirationDate = new Date(decodedToken.exp * 1000); // Convert exp (seconds) to milliseconds
+        // Set the cookie with the expiration date
+        Cookies.set('token', response.data.token, { expires: expirationDate });
+        
         router.push('/dashboard')
       }
     } catch (err) {
@@ -46,7 +57,7 @@ export function Login({}/*: LoginProps*/) {
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>login</CardTitle>
         <CardDescription>Enter your credentials to access your account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -67,9 +78,17 @@ export function Login({}/*: LoginProps*/) {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full mt-4">Login</Button>
+          <Button type="submit" className="w-full mt-4">login</Button>
         </form>
       </CardContent>
+      <CardFooter className="flex justify-center">
+        <p className="text-sm text-muted-foreground">
+          Don't have an account yet? {' '}
+          <Link href="/register" className="text-primary hover:underline">
+            register
+          </Link>
+        </p>
+      </CardFooter>
     </Card>
   )
 }
