@@ -92,13 +92,13 @@ export default function JobDescription() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center relative p-4 sm:p-6 md:p-8 lg:p-12" style={{ backgroundImage: "url('/images/background.jpg')" }}>
       <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/50 backdrop-blur-sm"></div>
-      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 lg:top-12 lg:left-12 z-10">
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 z-10">
         <Image
           src="/images/goofyahh.png"
           alt="Company Logo"
           width={128}
           height={128}
-          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain transition-transform duration-300 hover:scale-110"
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain"
         />
       </div>
       <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl bg-white bg-opacity-90 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg backdrop-blur-sm z-10 transition-all duration-300 hover:shadow-xl">
