@@ -9,8 +9,10 @@ import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
 
 interface DecodedToken {
+  userId : string;
+  email : string;
+  username : string;
   exp: number;
-  [key: string]: any;
 }
 
 export default function ResumeUpload() {
@@ -77,8 +79,7 @@ export default function ResumeUpload() {
     try {
       await axios.post('/api/resume-upload', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          'Content-Type': 'multipart/form-data'
         }
       })
       setSuccess('Resume uploaded successfully')

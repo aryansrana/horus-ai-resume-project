@@ -57,7 +57,7 @@ export function Login({}/*: LoginProps*/) {
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>login</CardTitle>
+        <CardTitle>Login</CardTitle>
         <CardDescription>Enter your credentials to access your account</CardDescription>
       </CardHeader>
       <CardContent>
@@ -78,12 +78,12 @@ export function Login({}/*: LoginProps*/) {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full mt-4">login</Button>
+          <Button type="submit" className="w-full mt-4">Login</Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Don't have an account yet? {' '}
+        {'Don\'t have an account yet? '} {' '}
           <Link href="/register" className="text-primary hover:underline">
             register
           </Link>

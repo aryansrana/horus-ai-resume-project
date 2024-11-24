@@ -7,8 +7,10 @@ import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
 
 interface DecodedToken {
+  userId : string;
+  email : string;
+  username : string;
   exp: number;
-  [key: string]: any;
 }
 
 export default function RegisterPage() {
@@ -22,7 +24,6 @@ export default function RegisterPage() {
         try {
           const decodedToken = jwtDecode(token) as DecodedToken
           const currentTime = Date.now() / 1000
-
           if (decodedToken.exp > currentTime) {
             // Token is valid and not expired
             router.push('/dashboard')
