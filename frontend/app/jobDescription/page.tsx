@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -8,6 +7,17 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { jwtDecode } from "jwt-decode"
+import Cookies from 'js-cookie'
+
+interface DecodedToken {
+  userId : string;
+  email : string;
+  username : string;
+  exp: number;
+}
 
 const jobDescriptionSchema = z.object({
   jobDescription: z.string().min(1).max(5000),
@@ -22,11 +32,48 @@ export default function JobDescription() {
       jobDescription: '',
     },
   })
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
+
+  useEffect(() => {
+    const validateToken = () => {
+      const token = Cookies.get('token')
+      if (!token) {
+        router.push('/login')
+        return
+      }
+
+      try {
+        const decodedToken = jwtDecode(token) as DecodedToken
+        const currentTime = Date.now() / 1000
+
+        if (decodedToken.exp < currentTime) {
+          // Token has expired
+          Cookies.remove('token')
+          router.push('/login')
+        } else {
+          setIsLoading(false)
+        }
+      } catch (error) {
+        console.error('Invalid token:', error)
+        Cookies.remove('token')
+        router.push('/login')
+      }
+    }
+
+    validateToken()
+  }, [router])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  
+
 
   const onSubmit = async (values: z.infer<typeof jobDescriptionSchema>) => {
     try {
       await axios.post('/api/job-description', values, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Content-Type': 'application/json'}
       })
       setSuccess('Job description submitted successfully')
       setError('')
