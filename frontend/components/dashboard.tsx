@@ -1,8 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
@@ -22,25 +20,7 @@ const mockData = {
 }
 
 export function Dashboard() {
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
   const [data, setData] = useState(mockData)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    console.log('Token in dashboard:', token)
-    if (!token) {
-      console.log('No token found, redirecting to login')
-      router.push('/login')
-    } else {
-      console.log('Token found, loading dashboard')
-      setIsLoading(false)
-    }
-  }, [router])
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-500'
