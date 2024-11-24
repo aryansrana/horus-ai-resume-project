@@ -59,45 +59,74 @@ export function Register({}/*: RegisterProps*/) {
   }
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>register</CardTitle>
-        <CardDescription>Create a new account</CardDescription>
+    <Card className="w-full max-w-[90%] sm:max-w-md mx-auto">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-center">Register</CardTitle>
+        <CardDescription className="text-center text-sm sm:text-base">Create a new account</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit}>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" name="username" value={formData.username} onChange={handleChange} required />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" value={formData.password} onChange={handleChange} required />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input id="confirmPassword" name="confirmPassword" type="password" value={confirmPassword} onChange={handleChange} required />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm sm:text-base">Email</Label>
+            <Input 
+              id="email" 
+              name="email" 
+              type="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              required 
+              className="w-full px-3 py-2 text-sm sm:text-base"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="username" className="text-sm sm:text-base">Username</Label>
+            <Input 
+              id="username" 
+              name="username" 
+              value={formData.username} 
+              onChange={handleChange} 
+              required 
+              className="w-full px-3 py-2 text-sm sm:text-base"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-sm sm:text-base">Password</Label>
+            <Input 
+              id="password" 
+              name="password" 
+              type="password" 
+              value={formData.password} 
+              onChange={handleChange} 
+              required 
+              className="w-full px-3 py-2 text-sm sm:text-base"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword" className="text-sm sm:text-base">Confirm Password</Label>
+            <Input 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              type="password" 
+              value={confirmPassword} 
+              onChange={handleChange} 
+              required 
+              className="w-full px-3 py-2 text-sm sm:text-base"
+            />
           </div>
           {error && (
-            <Alert variant="destructive" className="mt-4">
+            <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full mt-4">register</Button>
+          <Button type="submit" className="w-full text-sm sm:text-base py-2 sm:py-3">Register</Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Already have an account? {' '}
           <Link href="/login" className="text-primary hover:underline">
-            login
+            Login
           </Link>
         </p>
       </CardFooter>

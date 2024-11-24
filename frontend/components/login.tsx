@@ -9,11 +9,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import {/* LoginProps, */LoginFormData } from "@/app/types/auth"
+import { LoginFormData } from "@/app/types/auth"
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
-export function Login({}/*: LoginProps*/) {
+export function Login() {
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -38,8 +38,7 @@ export function Login({}/*: LoginProps*/) {
       })
       if (response.data.token) {
         const decodedToken: { exp: number } = jwtDecode(response.data.token);
-        const expirationDate = new Date(decodedToken.exp * 1000); // Convert exp (seconds) to milliseconds
-        // Set the cookie with the expiration date
+        const expirationDate = new Date(decodedToken.exp * 1000);
         Cookies.set('token', response.data.token, { expires: expirationDate });
         
         router.push('/dashboard')
@@ -55,41 +54,57 @@ export function Login({}/*: LoginProps*/) {
   }
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>Enter your credentials to access your account</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-background">
+      <Card className="w-full max-w-[400px] sm:max-w-[350px]">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+          <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+              <Input 
+                id="email" 
+                name="email" 
+                type="email" 
+                value={formData.email} 
+                onChange={handleChange} 
+                required 
+                className="w-full"
+              />
             </div>
-            <div className="flex flex-col space-y-1.5">
+            <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" value={formData.password} onChange={handleChange} required />
+              <Input 
+                id="password" 
+                name="password" 
+                type="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+                required 
+                className="w-full"
+              />
             </div>
-          </div>
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <Button type="submit" className="w-full mt-4">Login</Button>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-center">
-        <p className="text-sm text-muted-foreground">
-        {'Don\'t have an account yet? '} {' '}
-          <Link href="/register" className="text-primary hover:underline">
-            register
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
+            {error && (
+              <Alert variant="destructive">
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button type="submit" className="w-full">Login</Button>
+          </form>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-muted-foreground">
+            Don't have an account yet?{' '}
+            <Link href="/register" className="text-primary hover:underline">
+              Register
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
 
