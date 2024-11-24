@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Login } from '@/components/login'
+import Login from '@/components/login'
 import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
 
