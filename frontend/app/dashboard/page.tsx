@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
 
+import { Dashboard } from "@/components/dashboard"
+
 interface DecodedToken {
   userId : string;
   email : string;
@@ -12,7 +14,7 @@ interface DecodedToken {
   exp: number;
 }
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
@@ -50,10 +52,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p>Welcome to your protected dashboard!</p>
+    <div className="flex justify-center items-center min-h-screen">
+      <Dashboard />
     </div>
   )
 }
-
