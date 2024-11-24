@@ -11,7 +11,6 @@ class ResumeService {
                 data: resume_file.buffer,
                 contentType: resume_file.mimetype,
             });
-
             await newResume.save();
 
             return { message: "Resume uploaded successfully.", status: "success" };
@@ -24,13 +23,10 @@ class ResumeService {
         try {
             // Retrieve resume from MongoDB
             const resume = await Resume.findOne({fileName : resume_name});
-
             if (!resume) {
                 throw new Error("Resume not found.");
             }
-
             const { data, contentType } = resume;
-
             // Ensure data exists
             if (!data || !contentType) {
                 throw new Error("Invalid resume data.");

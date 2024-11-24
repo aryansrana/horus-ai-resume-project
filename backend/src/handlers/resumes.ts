@@ -20,12 +20,12 @@ class ResumeHandler {
     }
     static async get_resume(req: Request, res: Response) {
         try {
-            const {resume_name} = req.body;
-            if (!resume_name) {
+            const {fileName} = req.params;
+            if (!fileName) {
                 res.status(400).json({ error: 'File not found.', status: 'error' });
                 return;
             }
-            const result = await ResumeService.extract_text_from_resume(resume_name);
+            const result = await ResumeService.extract_text_from_resume(fileName);
             res.status(200).json({ text: result, status: 'success' });
             return;
         } catch (error) {

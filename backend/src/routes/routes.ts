@@ -70,6 +70,6 @@ router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, 
 
 router.post('/job-description', DescriptionHandler.job_description);
 
-router.get('/resume', ResumeHandler.get_resume)
+router.get('/resume/:fileName', ResumeHandler.get_resume)
 
 export default router;

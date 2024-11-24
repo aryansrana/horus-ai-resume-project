@@ -27,7 +27,7 @@ describe("/api", () => {
         await mongoose.connection.close();
       }); 
 
-    describe("/resume", () =>{
+    describe("/resume_upload", () =>{
         it('insert into database pdf', async () => {
             const filePath = path.resolve("./src/__tests__/", "testFiles", "file1.pdf");
             const file = fs.readFileSync(filePath)
@@ -91,8 +91,46 @@ describe("/api", () => {
                 .expect(400)
         })
 
+        const fileName = "file1.pdf"
+        it('extract from pdf', async () => {
+            const response = await request(app)
+                .get(`/api/resume/${fileName}`)
+                .expect(200)
+            expect(response.body).toStrictEqual({ text: '\n\nText\nMoreText\ndfgkjfdgkh', status: 'success' })
+        });
 
+        const fileName2 = "file2.docx"
+        it('extract from docx', async () => {
+            const response = await request(app)
+                .get(`/api/resume/${fileName2}`)
+                .expect(200)
+            expect(response.body).toStrictEqual({
+                text: {
+                  value: 'Text\n\n\n\nMore Text\n\n\n\ndfgkjfdgkh\n\n',
+                  messages: []
+                },
+                status: 'success'
+              })
+        });
+
+        const fileName3 = "largeFile.pdf"
+        it('extract from pdf with large file', async () => {
+            const response = await request(app)
+                .get(`/api/resume/${fileName3}`)
+                .expect(500)
+            expect(response.body).toStrictEqual({ error: 'Resume not found.', status: 'error' })
+        });
+
+        
+        it ('try no file', async ()=>{
+            const response = await request(app)
+                .get(`/api/resume/`)
+                .expect(404)
+            expect(response.body).toStrictEqual({ })
+        })
+        
     })
+
 
     
 })
