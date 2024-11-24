@@ -43,7 +43,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center p-4 sm:p-6 md:p-8" style={{ backgroundImage: "url('/images/background.jpg')" }}>
+    <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center p-4 sm:p-6 md:p-8" style={{ backgroundImage: "url('/images/background.jpg')" }}>
       <div className="relative inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/50"></div>
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 z-10">
         <Image
