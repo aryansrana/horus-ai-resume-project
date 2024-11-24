@@ -1,7 +1,4 @@
-README.md should include:
-Project name, description, team members, and contact info.
-High-level project overview and goals.
-Instructions on setting up the project locally.
+### Refer to docs/SETUP.md for instructions on how to set up app locally, contact information at the very bottom
 
 # Project Name
 ## HorusAI
@@ -206,3 +203,4 @@ Task 31: Conduct a final code review and refactoring session to improve code qua
 - Discord: sulfre
 ## Abhinav Ramesh
 - Discord: novice2921
+
