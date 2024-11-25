@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode"
 import Cookies from 'js-cookie'
 
 import { Dashboard } from "@/components/dashboard"
+import { NavigationBar } from "@/components/navbar"
 
 interface DecodedToken {
   userId : string;
@@ -53,6 +54,9 @@ export default function DashboardPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
+      <div className="items-center justify-center min-h-screen fixed top-7">
+        <NavigationBar />
+      </div>
       <Dashboard />
     </div>
   )

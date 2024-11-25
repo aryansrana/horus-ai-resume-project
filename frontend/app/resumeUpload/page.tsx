@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode"
+import { NavigationBar } from "@/components/navbar"
 
 interface DecodedToken {
   userId: string;
@@ -97,6 +98,9 @@ export default function ResumeUpload() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center relative p-4 sm:p-6 md:p-8" style={{ backgroundImage: "url('/images/background.jpg')" }}>
       <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-transparent to-black/50"></div>
+      <div className="items-center justify-center min-h-screen fixed top-7">
+        <NavigationBar />
+      </div>
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 z-10">
         <Image
           src="/images/goofyahh.png"
