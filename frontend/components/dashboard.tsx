@@ -55,7 +55,7 @@ export function Dashboard() {
         />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
-        <h1 className="text-3xl font-bold mt-24">Resume Analysis Dashboard</h1>
+        <h1 className="text-3xl font-bold mt-24 text-[#9c8679]">Resume Analysis Dashboard</h1>
         <Card className="md:col-span-2 bg-white bg-opacity-90 shadow-lg backdrop-blur-sm z-10">
           <CardHeader>
             <div className="flex items-center justify-center">
