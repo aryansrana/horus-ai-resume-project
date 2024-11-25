@@ -22,13 +22,14 @@ class ResumeHandler {
         try {
             const {resume_name} = req.body;
             if (!resume_name) {
-                res.status(400).json({ error: 'File not found.', status: 'error' });
+                res.status(400).json({ error: 'File name not given.', status: 'error' });
                 return;
             }
             const result = await ResumeService.extract_text_from_resume(resume_name);
             res.status(200).json({ text: result, status: 'success' });
             return;
         } catch (error) {
+            console.error(error);
             res.status(500).json({ error: (error as Error).message, status: 'error' });
             return;
         }
