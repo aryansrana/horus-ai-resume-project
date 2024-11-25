@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
+import Cookies from 'js-cookie'
 
 export function NavigationBar() {
   const router = useRouter()
@@ -10,8 +11,9 @@ export function NavigationBar() {
   const handleLogout = async () => {
     // TODO: Implement actual logout logic here
     // For example, call an API to invalidate the session
+    // If token cookie exists, remove it and redirect user to login page
+    Cookies.remove('token');
     console.log('Logging out...')
-    
     // Redirect to login page after logout
     router.push('/login')
   }
