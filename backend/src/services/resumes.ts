@@ -43,8 +43,8 @@ class ResumeService {
             }
 
             if (contentType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                const result = await mammoth.extractRawText({ buffer: data });
-                return result;
+                const docxData = await mammoth.extractRawText({ buffer: data });
+                return docxData.value;
             }
 
             throw new Error("Unsupported file type.");
