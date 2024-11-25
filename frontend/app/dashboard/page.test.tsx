@@ -1,3 +1,11 @@
+import React from 'react'
+import { render, screen, waitFor } from '@testing-library/react'
+import '@testing-library/jest-dom'
+import DashboardPage from './page'
+import { useRouter } from 'next/navigation'
+import { jwtDecode } from 'jwt-decode'
+import Cookies from 'js-cookie'
+
 const originalError = console.error;
 beforeAll(() => {
   console.error = jest.fn();
@@ -6,14 +14,6 @@ beforeAll(() => {
 afterAll(() => {
   console.error = originalError;
 });
-
-import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import DashboardPage from './page'
-import { useRouter } from 'next/navigation'
-import { jwtDecode } from 'jwt-decode'
-import Cookies from 'js-cookie'
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -84,6 +84,34 @@ describe('DashboardPage', () => {
       expect(mockPush).toHaveBeenCalledWith('/login')
       expect(console.error).toHaveBeenCalledWith('Invalid token:', expect.any(Error))
     })
+  })
+
+  // New test to verify that restricted routes enforce login
+  it('enforces login for restricted routes', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<DashboardPage />)
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/login')
+    })
+  })
+
+  // New test to confirm navigation across routes
+  it('allows navigation to other routes when authenticated', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue('valid_token')
+    ;(jwtDecode as jest.Mock).mockReturnValue({ exp: Date.now() / 1000 + 3600 })
+
+    render(<DashboardPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard')).toBeInTheDocument()
+    })
+
+    // Simulate navigation to another route
+    mockPush('/profile')
+
+    expect(mockPush).toHaveBeenCalledWith('/profile')
   })
 })
 

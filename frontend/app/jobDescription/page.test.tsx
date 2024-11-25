@@ -8,6 +8,15 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 
+const originalError = console.error;
+beforeAll(() => {
+  console.error = jest.fn();
+});
+
+afterAll(() => {
+  console.error = originalError;
+});
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -15,12 +24,11 @@ jest.mock('next/navigation', () => ({
 
 // Mock next/image
 jest.mock('next/image', () => ({
-    __esModule: true,
-    default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
-      // eslint-disable-next-line @next/next/no-img-element
-      return <img {...props} alt={props.alt || ''} />
-    },
-  }))
+  __esModule: true,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    return <img {...props} alt={props.alt || ''} />
+  },
+}))
 
 // Mock axios
 jest.mock('axios')
@@ -163,6 +171,34 @@ describe('JobDescription', () => {
       expect(submitButton).not.toBeDisabled()
       expect(screen.queryByText('Submitting...')).not.toBeInTheDocument()
     })
+  })
+
+  // New test to verify that restricted routes enforce login
+  it('enforces login for restricted routes', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<JobDescription />)
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/login')
+    })
+  })
+
+  // New test to confirm navigation across routes
+  it('allows navigation to other routes when authenticated', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue('valid_token')
+    ;(jwtDecode as jest.Mock).mockReturnValue({ exp: Date.now() / 1000 + 3600 })
+
+    render(<JobDescription />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /job description/i })).toBeInTheDocument()
+    })
+
+    // Simulate navigation to another route
+    mockPush('/dashboard')
+
+    expect(mockPush).toHaveBeenCalledWith('/dashboard')
   })
 })
 

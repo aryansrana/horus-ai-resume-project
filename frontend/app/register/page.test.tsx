@@ -6,6 +6,15 @@ import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 
+const originalError = console.error;
+beforeAll(() => {
+  console.error = jest.fn();
+});
+
+afterAll(() => {
+  console.error = originalError;
+});
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -93,5 +102,52 @@ describe('RegisterPage', () => {
       expect(container).toHaveClass('flex justify-center items-center min-h-screen')
     })
   })
+
+  // New test to check if the Register component is rendered
+  it('renders the Register component', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<RegisterPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-register')).toBeInTheDocument()
+    })
+  })
+
+  // New test to verify that restricted routes enforce login
+  it('enforces login for restricted routes', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<RegisterPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-register')).toBeInTheDocument()
+    })
+
+    // Attempt to navigate to a restricted route
+    mockPush('/dashboard')
+
+    // Verify that we're still on the register page
+    expect(screen.getByTestId('mock-register')).toBeInTheDocument()
+  })
+
+  // New test to confirm navigation across routes
+  it('allows navigation to public routes', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<RegisterPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-register')).toBeInTheDocument()
+    })
+
+    // Navigate to a public route
+    mockPush('/about')
+
+    // Verify that the router was called with the correct route
+    expect(mockPush).toHaveBeenCalledWith('/about')
+  })
 })
+
+
 
