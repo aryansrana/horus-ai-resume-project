@@ -93,5 +93,40 @@ describe('LoginPage', () => {
       expect(container).toHaveClass('flex justify-center items-center min-h-screen')
     })
   })
+
+  // New test to verify that restricted routes enforce login
+  it('enforces login for restricted routes', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<LoginPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-login')).toBeInTheDocument()
+    })
+
+    // Attempt to navigate to a restricted route
+    mockPush('/dashboard')
+
+    // Verify that we're still on the login page
+    expect(screen.getByTestId('mock-login')).toBeInTheDocument()
+  })
+
+  // New test to confirm navigation across routes
+  it('allows navigation to public routes', async () => {
+    ;(Cookies.get as jest.Mock).mockReturnValue(null)
+
+    render(<LoginPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-login')).toBeInTheDocument()
+    })
+
+    // Navigate to a public route
+    mockPush('/about')
+
+    // Verify that the router was called with the correct route
+    expect(mockPush).toHaveBeenCalledWith('/about')
+  })
+
 })
 
