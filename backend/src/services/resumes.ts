@@ -54,7 +54,7 @@ class ResumeService {
     }
 
     static async get_feedback(resume_text: string, job_description: string){
-        const token = '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'
+        const token = process.env.HUGGINGFACE_API_KEY
         const prompt = `
         You are an expert resume evaluator. Based on the provided job description and resume, give constructive, actionable feedback on how the resume can be improved to better match the job description. Provide at most five suggestions. Do not repeat the resume or job description in the feedback. Only give the feedback, formatted as a list of concise, actionable points. Avoid including any extra text, such as explanations or repetitions of the prompt.
 
