@@ -1,7 +1,7 @@
 import { Resume } from "../models/resumes";
 import pdfParse from 'pdf-parse';
 import mammoth from "mammoth";
-
+import axios from 'axios';
 
 class ResumeService {
     static async resume_upload(resume_file: Express.Multer.File) {
@@ -50,6 +50,40 @@ class ResumeService {
             throw new Error("Unsupported file type.");
         } catch (error) {
             throw new Error((error as Error).message || "Error during resume text extraction");
+        }
+    }
+
+    static async get_feedback(resume_text: string, job_description: string){
+        const token = process.env.HUGGINGFACE_API_KEY
+        const prompt = `
+        You are an expert resume evaluator. Based on the provided job description and resume, give constructive, actionable feedback on how the resume can be improved to better match the job description. Provide at most five suggestions. Do not repeat the resume or job description in the feedback. Only give the feedback, formatted as a list of concise, actionable points. Avoid including any extra text, such as explanations or repetitions of the prompt.
+
+        Resume: ${resume_text}
+        Job Description: ${job_description}
+
+        Feedback:`
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        };
+        const load = {
+            inputs:{
+                "source_sentence": resume_text,
+                "sentences": [job_description]
+            }
+        };
+        
+        try{
+            const response = await axios.post('https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2', load, {headers, timeout: 10000});
+            const fitScore = response.data;
+            const response2 = await axios.post('https://api-inference.huggingface.co/models/openai-community/gpt2', { inputs: prompt }, {headers});
+            const feedback = response2.data[0].generated_text
+            return { "fit_score": fitScore[0], "feedback": feedback};
+        } catch (error) {
+            if (axios.isAxiosError(error)){
+                console.error(error.response?.data)
+            }
+            throw new Error((error as Error).message || 'Error during resume upload');
         }
     }
 }

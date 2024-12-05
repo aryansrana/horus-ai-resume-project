@@ -34,6 +34,23 @@ class ResumeHandler {
             return;
         }
     }
+    static async analyze(req: Request, res: Response){
+        try{
+            const {resume_text, job_description} = req.body
+            if (resume_text.length > 10000 || job_description.length > 10000){
+                res.status(400).json({ error: 'Either Resume or Job description exceeds character limit of 10000.' });
+                return;
+            }
+            const result = await ResumeService.get_feedback(resume_text, job_description);
+            res.status(200).json({fit_score: result.fit_score, feedback: result.feedback});
+            return;
+        }
+        catch(error){
+            console.error(error);
+            res.status(500).json({ error: (error as Error).message, status: 'error' });
+            return;
+        }
+    }
 }
 
 export default ResumeHandler;

@@ -72,4 +72,6 @@ router.post('/job-description', DescriptionHandler.job_description);
 
 router.get('/resume', ResumeHandler.get_resume)
 
+router.post('/analyze', ResumeHandler.analyze);
+
 export default router;
