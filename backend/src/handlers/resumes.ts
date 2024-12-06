@@ -29,7 +29,6 @@ class ResumeHandler {
             res.status(200).json({ text: result, status: 'success' });
             return;
         } catch (error) {
-            console.error(error);
             res.status(500).json({ error: (error as Error).message, status: 'error' });
             return;
         }

@@ -1,10 +1,7 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import multer, { FileFilterCallback } from 'multer';
-import UserHandler from '../handlers/users';
+import router from './router';
 import ResumeHandler from '../handlers/resumes';
-import DescriptionHandler from '../handlers/descriptions';
-
-const router = Router();
+import { Request, Response, NextFunction } from 'express';
+import multer, { FileFilterCallback } from 'multer';
 
 const storage = multer.memoryStorage(); // Store files in memory as Buffer
 const upload = multer({
@@ -62,16 +59,8 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 }
 
 
-router.post('/register', UserHandler.register);
-
-router.post('/login', UserHandler.login);
-
 router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
-
-router.post('/job-description', DescriptionHandler.job_description);
 
 router.get('/resume', ResumeHandler.get_resume)
 
 router.post('/analyze', ResumeHandler.analyze);
-
-export default router;
