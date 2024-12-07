@@ -33,6 +33,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/job-description')
                 .send({
+                    "email": "test@example.com",
                     "job_description": "This Job ..."
                 })
                 .expect(200)
@@ -43,6 +44,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/job-description')
                 .send({
+                    "email": "test@example.com",
                     "job_description": 35
                 })
                 .expect(400)
@@ -53,6 +55,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/job-description')
                 .send({
+                    "email": "test@example.com",
                     "job_description" : "abcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrstabcdefghiklmnopqrst"
                 })
                 .expect(400)
@@ -63,12 +66,11 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/job-description')
                 .send({
+                    "email": "test@example.com",
                     "job_description" : ""
                 })
                 .expect(400)
             expect(response.body).toStrictEqual( { error: 'Invalid job description.' })
         })
     })
-
-    
 })
