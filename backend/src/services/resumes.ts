@@ -4,9 +4,10 @@ import mammoth from "mammoth";
 import axios from 'axios';
 
 class ResumeService {
-    static async resume_upload(resume_file: Express.Multer.File) {
+    static async resume_upload(email :string, resume_file: Express.Multer.File) {
         try {
             const newResume = new Resume({
+                email: email,
                 fileName: resume_file.originalname,
                 data: resume_file.buffer,
                 contentType: resume_file.mimetype,

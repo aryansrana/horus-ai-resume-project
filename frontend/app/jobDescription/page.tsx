@@ -1,4 +1,5 @@
 'use client';
+
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,9 +17,9 @@ import { Loader2 } from 'lucide-react'
 import { NavigationBar } from "@/components/navbar"
 
 interface DecodedToken {
-  userId : string;
-  email : string;
-  username : string;
+  userId: string;
+  email: string;
+  username: string;
   exp: number;
 }
 
@@ -31,6 +32,7 @@ export default function JobDescription() {
   const [success, setSuccess] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
   const router = useRouter()
 
   const form = useForm<z.infer<typeof jobDescriptionSchema>>({
@@ -57,6 +59,7 @@ export default function JobDescription() {
           Cookies.remove('token')
           router.push('/login')
         } else {
+          setUserEmail(decodedToken.email)
           setIsLoading(false)
         }
       } catch (error) {
@@ -76,7 +79,10 @@ export default function JobDescription() {
   const onSubmit = async (values: z.infer<typeof jobDescriptionSchema>) => {
     setIsSubmitting(true)
     try {
-      await axios.post('http://localhost:8080/api/job-description', values, {
+      await axios.post('http://localhost:8080/api/job-description', {
+        ...values,
+        email: userEmail
+      }, {
         headers: { 'Content-Type': 'application/json'}
       })
       setSuccess('Job description submitted successfully')
