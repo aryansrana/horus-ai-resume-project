@@ -8,7 +8,7 @@ class ResumeService {
         try {
             const newResume = new Resume({
                 email: email,
-                name: resume_file.originalname,
+                name: resume_file.originalname.trim(),
                 data: resume_file.buffer,
                 contentType: resume_file.mimetype,
             });
