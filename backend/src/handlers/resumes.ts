@@ -6,11 +6,16 @@ class ResumeHandler {
     static async resume_upload(req: Request, res: Response) {
         try {
             const resume_file = req.file;
+            const { email } = req.body;
+            if(!email || typeof email !== 'string'){
+                res.status(400).json({ error: 'Invalid email.' });
+                return;
+            }
             if (!resume_file) {
                 res.status(400).json({ error: 'No file uploaded.', status: 'error' });
                 return;
             }
-            const result = await ResumeService.resume_upload(resume_file);
+            const result = await ResumeService.resume_upload(email, resume_file);
             res.status(200).json({ message: 'Resume uploaded successfully.', status: 'success' });
             return;
         } catch (error) {
@@ -18,7 +23,7 @@ class ResumeHandler {
             return;
         }
     }
-    static async get_resume(req: Request, res: Response) {
+    static async extract_resume(req: Request, res: Response) {
         try {
             const {resume_name} = req.body;
             if (!resume_name) {

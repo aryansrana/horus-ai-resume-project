@@ -4,7 +4,11 @@ import DescriptionService from '../services/descriptions';
 class DescriptionHandler {
     static async job_description(req: Request, res: Response) {
         try {
-            const { job_description } = req.body;
+            const { email, job_description } = req.body;
+            if(!email || typeof email !== 'string'){
+                res.status(400).json({ error: 'Invalid email.' });
+                return;
+            }
             if (!job_description || typeof job_description !== 'string') {
                 res.status(400).json({ error: 'Invalid job description.' });
                 return;
@@ -16,7 +20,7 @@ class DescriptionHandler {
                 return;
             }
 
-            const result = await DescriptionService.job_description(job_description);
+            const result = await DescriptionService.job_description(email, job_description);
             res.status(200).json(result);
             return;
         } catch (error) {

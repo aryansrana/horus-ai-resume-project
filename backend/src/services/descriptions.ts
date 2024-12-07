@@ -4,12 +4,13 @@ import pdfParse from 'pdf-parse';
 
 
 class DescriptionService {
-    static async job_description(job_description: string) {
+    static async job_description(email: string, job_description: string) {
         try {
             // Clean up and trim the job description text
             const cleanedDescription = job_description.trim();
 
             const newDescription = new Description({
+                email: email,
                 job_description: cleanedDescription,
             });
             

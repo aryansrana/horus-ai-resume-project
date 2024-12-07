@@ -23,6 +23,7 @@ export default function ResumeUpload() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [userEmail, setUserEmail] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -38,10 +39,10 @@ export default function ResumeUpload() {
         const currentTime = Date.now() / 1000
 
         if (decodedToken.exp < currentTime) {
-          // Token has expired
           Cookies.remove('token')
           router.push('/login')
         } else {
+          setUserEmail(decodedToken.email)
           setIsLoading(false)
         }
       } catch (error) {
@@ -70,7 +71,6 @@ export default function ResumeUpload() {
       }
     }
   }
-  
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -78,12 +78,12 @@ export default function ResumeUpload() {
 
     const formData = new FormData()
     formData.append('resume_file', file)
+    formData.append('email', userEmail)
 
     try {
       await axios.post('http://localhost:8080/api/resume-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${Cookies.get('token')}`
         }
       })
       setSuccess('Resume uploaded successfully')

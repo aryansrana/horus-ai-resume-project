@@ -61,6 +61,6 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 
 router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
 
-router.get('/resume', ResumeHandler.get_resume)
+router.get('/resume', ResumeHandler.extract_resume)
 
 router.post('/analyze', ResumeHandler.analyze);
