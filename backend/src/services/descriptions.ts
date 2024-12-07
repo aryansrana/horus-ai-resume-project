@@ -1,16 +1,14 @@
 import { Description } from '../models/descriptions';
-import { Document, Schema } from 'mongoose';
-import pdfParse from 'pdf-parse';
-
 
 class DescriptionService {
-    static async job_description(email: string, job_description: string) {
+    static async job_description(email: string, title: string, job_description: string) {
         try {
             // Clean up and trim the job description text
             const cleanedDescription = job_description.trim();
-
+            const cleanedTitle = title.trim();
             const newDescription = new Description({
                 email: email,
+                title: cleanedTitle,
                 job_description: cleanedDescription,
             });
             
@@ -20,6 +18,40 @@ class DescriptionService {
             return { status: 'success', message: 'Job description submitted successfully.' };
         } catch (error) {
             throw new Error((error as Error).message || 'Error during job description upload');
+        }
+    }
+    static async get_descriptions(email: string) {
+        try {
+            const descriptions = await Description.find({email: email}).sort({dateAdded: -1}); // -1 means reverse sorted, most recent will be on top
+            return descriptions;
+        } catch (error) {
+            throw new Error((error as Error).message || 'Error during job description retrieval.');
+        }
+    }
+    static async update_name(id: string, name: string){
+        try{
+            const description = await Description.findByIdAndUpdate(id, {name: name}, {new: true});
+            if(description){
+                return { status: 'success', message: 'Job description\'s name updated successfully.' };
+            }
+            else{
+                return { status: 'error', message: 'Job description not found.'};
+            }
+        }catch (error) {
+            throw new Error((error as Error).message || 'Error during job description name\'s update.');
+        }
+    }
+    static async delete_name(id: string){
+        try{
+            const description = await Description.findByIdAndDelete(id);
+            if(description){
+                return { status: 'success', message: 'Job description deleted successfully.' };
+            }
+            else{
+                return { status: 'error', message: 'Job description not found.'};
+            }
+        }catch (error) {
+            throw new Error((error as Error).message || 'Error during job description\'s deletion.');
         }
     }
 }

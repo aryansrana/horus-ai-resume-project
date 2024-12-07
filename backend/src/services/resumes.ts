@@ -87,6 +87,40 @@ class ResumeService {
             throw new Error((error as Error).message || 'Error during resume upload');
         }
     }
+    static async get_resumes(email: string) {
+        try {
+            const resumes = await Resume.find({email: email}).sort({dateAdded: -1}); // -1 means reverse sorted, most recent will be on top
+            return resumes;
+        } catch (error) {
+            throw new Error((error as Error).message || 'Error during resumes retrieval.');
+        }
+    }
+    static async update_name(id: string, name: string){
+        try{
+            const resume = await Resume.findByIdAndUpdate(id, {name: name}, {new: true});
+            if(resume){
+                return { status: 'success', message: 'Resume\'s name updated successfully.' };
+            }
+            else{
+                return { status: 'error', message: 'Resume not found.'};
+            }
+        }catch (error) {
+            throw new Error((error as Error).message || 'Error during resume name\'s update.');
+        }
+    }
+    static async delete_name(id: string){
+        try{
+            const resume = await Resume.findByIdAndDelete(id);
+            if(resume){
+                return { status: 'success', message: 'Resume deleted successfully.' };
+            }
+            else{
+                return { status: 'error', message: 'Resume not found.'};
+            }
+        }catch (error) {
+            throw new Error((error as Error).message || 'Error during resume\'s deletion.');
+        }
+    }
 }
 
 export default ResumeService;

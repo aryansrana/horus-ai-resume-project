@@ -55,6 +55,66 @@ class ResumeHandler {
             return;
         }
     }
+    static async get_resumes(req: Request, res: Response){
+        try{
+            const {email} = req.body
+            if (!email || typeof email !== 'string' ){
+                res.status(400).json({ error: 'Invalid email.' });
+                return;
+            }
+            const result = await ResumeService.get_resumes(email);
+            const count = result.length;
+            res.status(200).json({resumes: result, count: count});
+            return;
+        }
+        catch(error){
+            console.error(error);
+            res.status(500).json({ error: (error as Error).message, status: 'error' });
+            return;
+        }
+    }
+    static async update_name(req: Request, res: Response){
+        try{
+            const {id, name} = req.body
+            if (!id || typeof id !== 'string' ){
+                res.status(400).json({ error: 'Invalid ID.' });
+                return;
+            }
+            if (!name || typeof name !== 'string' ){
+                res.status(400).json({ error: 'Invalid name.' });
+                return;
+            }
+            const result = await ResumeService.update_name(id, name);
+            res.status((result.status == 'success') ? 200: 400).json(result);
+            return;
+        }
+        catch(error){
+            console.error(error);
+            res.status(500).json({ error: (error as Error).message, status: 'error' });
+            return;
+        }   
+    }
+    static async delete_name(req: Request, res: Response){
+        try{
+            const {id, name} = req.body
+            if (!id || typeof id !== 'string' ){
+                res.status(400).json({ error: 'Invalid ID.' });
+                return;
+            }
+            if (!name || typeof name !== 'string' ){
+                res.status(400).json({ error: 'Invalid name.' });
+                return;
+            }
+            const result = await ResumeService.delete_name(id);
+            res.status((result.status == 'success') ? 200: 400).json(result);
+            return;
+        }
+        catch(error){
+            console.error(error);
+            res.status(500).json({ error: (error as Error).message, status: 'error' });
+            return;
+        }   
+    }
 }
 
 export default ResumeHandler;

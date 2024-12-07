@@ -64,3 +64,9 @@ router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, 
 router.get('/resume', ResumeHandler.extract_resume)
 
 router.post('/analyze', ResumeHandler.analyze);
+
+router.get('/resumes', ResumeHandler.get_resumes);
+
+router.put('/resume', ResumeHandler.update_name);
+
+router.delete('/resume', ResumeHandler.delete_name);
