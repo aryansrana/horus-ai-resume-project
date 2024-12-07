@@ -4,13 +4,13 @@ import DescriptionService from '../services/descriptions';
 class DescriptionHandler {
     static async job_description(req: Request, res: Response) {
         try {
-            const { email, title, job_description } = req.body;
+            const { email, name, job_description } = req.body;
             if(!email || typeof email !== 'string'){
                 res.status(400).json({ error: 'Invalid email.' });
                 return;
             }
-            if(!title || typeof title !== 'string'){
-                res.status(400).json({ error: 'Invalid job title.' });
+            if(!name || typeof name !== 'string'){
+                res.status(400).json({ error: 'Invalid job name.' });
                 return;
             }
             if (!job_description || typeof job_description !== 'string') {
@@ -23,12 +23,12 @@ class DescriptionHandler {
                 res.status(400).json({ error: 'Job description exceeds character limit of 5000.' });
                 return;
             }
-            if (title.length > 50) {
-                res.status(400).json({ error: 'Job title exceeds character limit of 50.' });
+            if (name.length > 50) {
+                res.status(400).json({ error: 'Job name exceeds character limit of 50.' });
                 return;
             }
 
-            const result = await DescriptionService.job_description(email, title, job_description);
+            const result = await DescriptionService.job_description(email, name, job_description);
             res.status(200).json(result);
             return;
         } catch (error) {

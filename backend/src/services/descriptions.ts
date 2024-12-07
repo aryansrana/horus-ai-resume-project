@@ -1,14 +1,14 @@
 import { Description } from '../models/descriptions';
 
 class DescriptionService {
-    static async job_description(email: string, title: string, job_description: string) {
+    static async job_description(email: string, name: string, job_description: string) {
         try {
             // Clean up and trim the job description text
             const cleanedDescription = job_description.trim();
-            const cleanedTitle = title.trim();
+            const cleanedName = name.trim();
             const newDescription = new Description({
                 email: email,
-                title: cleanedTitle,
+                name: cleanedName,
                 job_description: cleanedDescription,
             });
             
