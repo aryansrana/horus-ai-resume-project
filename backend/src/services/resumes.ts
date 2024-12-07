@@ -97,7 +97,8 @@ class ResumeService {
     }
     static async update_name(id: string, name: string){
         try{
-            const resume = await Resume.findByIdAndUpdate(id, {name: name}, {new: true});
+            const cleanedName = name.trim();
+            const resume = await Resume.findByIdAndUpdate(id, {name: cleanedName}, {new: true});
             if(resume){
                 return { status: 'success', message: 'Resume\'s name updated successfully.' };
             }

@@ -30,7 +30,8 @@ class DescriptionService {
     }
     static async update_name(id: string, name: string){
         try{
-            const description = await Description.findByIdAndUpdate(id, {name: name}, {new: true});
+            const cleanedName = name.trim();
+            const description = await Description.findByIdAndUpdate(id, {name: cleanedName}, {new: true});
             if(description){
                 return { status: 'success', message: 'Job description\'s name updated successfully.' };
             }
