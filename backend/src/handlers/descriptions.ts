@@ -29,7 +29,7 @@ class DescriptionHandler {
             }
 
             const result = await DescriptionService.job_description(email, name, job_description);
-            res.status(200).json(result);
+            res.status(201).json(result);
             return;
         } catch (error) {
             res.status(500).json({ error: (error as Error).message });
@@ -57,12 +57,17 @@ class DescriptionHandler {
     static async update_name(req: Request, res: Response){
         try{
             const {id, name} = req.body
+            const cleanedName = name.trim();
             if (!id || typeof id !== 'string' ){
                 res.status(400).json({ error: 'Invalid ID.' });
                 return;
             }
-            if (!name || typeof name !== 'string' ){
+            if (!cleanedName || typeof name !== 'string' || typeof cleanedName !== 'string'){
                 res.status(400).json({ error: 'Invalid name.' });
+                return;
+            }
+            if(cleanedName.length > 50){
+                res.status(400).json({ error: 'Name is too long.' });
                 return;
             }
             const result = await DescriptionService.update_name(id, name);
@@ -77,13 +82,9 @@ class DescriptionHandler {
     }
     static async delete_name(req: Request, res: Response){
         try{
-            const {id, name} = req.body
+            const {id} = req.body
             if (!id || typeof id !== 'string' ){
                 res.status(400).json({ error: 'Invalid ID.' });
-                return;
-            }
-            if (!name || typeof name !== 'string' ){
-                res.status(400).json({ error: 'Invalid name.' });
                 return;
             }
             const result = await DescriptionService.delete_name(id);
