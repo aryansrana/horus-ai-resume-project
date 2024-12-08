@@ -16,7 +16,7 @@ class ResumeHandler {
                 return;
             }
             const result = await ResumeService.resume_upload(email, resume_file);
-            res.status(200).json({ message: 'Resume uploaded successfully.', status: 'success' });
+            res.status(201).json({ message: 'Resume uploaded successfully.', status: 'success' });
             return;
         } catch (error) {
             res.status(500).json({ error: (error as Error).message, status: 'error' });
@@ -76,12 +76,17 @@ class ResumeHandler {
     static async update_name(req: Request, res: Response){
         try{
             const {id, name} = req.body
+            const cleanedName = name.trim();
             if (!id || typeof id !== 'string' ){
                 res.status(400).json({ error: 'Invalid ID.' });
                 return;
             }
-            if (!name || typeof name !== 'string' ){
+            if (!cleanedName || typeof name !== 'string' || typeof cleanedName !== 'string'){
                 res.status(400).json({ error: 'Invalid name.' });
+                return;
+            }
+            if(cleanedName.length > 50){
+                res.status(400).json({ error: 'Name is too long.' });
                 return;
             }
             const result = await ResumeService.update_name(id, name);
@@ -96,13 +101,9 @@ class ResumeHandler {
     }
     static async delete_name(req: Request, res: Response){
         try{
-            const {id, name} = req.body
+            const {id} = req.body
             if (!id || typeof id !== 'string' ){
                 res.status(400).json({ error: 'Invalid ID.' });
-                return;
-            }
-            if (!name || typeof name !== 'string' ){
-                res.status(400).json({ error: 'Invalid name.' });
                 return;
             }
             const result = await ResumeService.delete_name(id);
