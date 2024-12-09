@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import ResumeService from '../services/resumes';
+import { Description } from '../models/descriptions';
 import multer from 'multer';
-
+import axios from 'axios';
 class ResumeHandler {
     static async resume_upload(req: Request, res: Response) {
         try {
@@ -28,7 +29,7 @@ class ResumeHandler {
     }
     static async extract_resume(req: Request, res: Response) {
         try {
-            const {id} = req.body;
+            const {id} = req.params;
             if (!id) {
                 res.status(400).json({ error: 'Id not given.', status: 'error' });
                 return;
@@ -43,14 +44,47 @@ class ResumeHandler {
     }
     static async analyze(req: Request, res: Response){
         try{
-            const {resume_text, job_description} = req.body
-            if (!resume_text || resume_text.length > 10000 || !job_description || job_description.length > 10000){
-                res.status(400).json({ error: 'Either Resume or Job description exceeds character limit of 10000.' });
+            const {resume_id, description_id} = req.body
+            const response = await axios.get(`http://localhost:8080/resume/`, { 
+                params: { id: resume_id }
+            })
+            if(response.status === 200){
+                const resume_text = response.data.text;
+                if(!resume_text){
+                    console.error('Resume text is empty or doesn\'t exist')
+                    res.status(400).json({error: 'Resume text is empty or doesn\'t exist'})
+                    return
+                }
+                if(resume_text.length > 10000){
+                    console.error('Resume exceeds character limit of 10000.')
+                    res.status(400).json({error: 'Resume exceeds character limit of 10000.'})
+                }
+                const job_description = await Description.findById(description_id);
+                if(!job_description){
+                    console.error('Job Description not found in database.')
+                    res.status(400).json({error: 'Job Description not found in database.'})
+                    return;
+                }
+                const description_text = job_description.job_description;
+                if(!description_text){
+                    console.error('Job description text is empty or doesn\'t exist')
+                    res.status(400).json({error: 'Job description text is empty or doesn\'t exist'})
+                    return;
+                }
+                console.error('Job description exceeds character limit of 10000.')
+                if(description_text.length > 10000){
+                    res.status(400).json({error: 'Job description exceeds character limit of 10000.'})
+                    return;
+                }
+                const result = await ResumeService.get_feedback(resume_text, description_text);
+                console.log(result);
+                res.status(200).json({fit_score: result.fit_score, feedback: result.feedback, matching_keywords: []});
                 return;
             }
-            const result = await ResumeService.get_feedback(resume_text, job_description);
-            res.status(200).json({fit_score: result.fit_score, feedback: result.feedback});
-            return;
+            else{
+                res.status(400).json({error: "Resume not found during text extraction.", status: 'error'});
+                return;
+            }
         }
         catch(error){
             console.error(error);
