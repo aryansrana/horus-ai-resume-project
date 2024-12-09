@@ -38,7 +38,7 @@ class DescriptionHandler {
     }
     static async get_descriptions(req: Request, res: Response){
         try{
-            const {email} = req.body
+            const {email} = req.params
             if (!email || typeof email !== 'string' ){
                 res.status(400).json({ error: 'Invalid email.' });
                 return;

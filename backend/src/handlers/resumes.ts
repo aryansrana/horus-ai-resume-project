@@ -5,14 +5,17 @@ import multer from 'multer';
 class ResumeHandler {
     static async resume_upload(req: Request, res: Response) {
         try {
+            console.log('hi')
             const resume_file = req.file;
             const { email } = req.body;
             if(!email || typeof email !== 'string'){
                 res.status(400).json({ error: 'Invalid email.' });
+                console.log("email not found")
                 return;
             }
             if (!resume_file) {
                 res.status(400).json({ error: 'No file uploaded.', status: 'error' });
+                console.log("resume_file not found");
                 return;
             }
             const result = await ResumeService.resume_upload(email, resume_file);
@@ -41,7 +44,7 @@ class ResumeHandler {
     static async analyze(req: Request, res: Response){
         try{
             const {resume_text, job_description} = req.body
-            if (resume_text.length > 10000 || job_description.length > 10000){
+            if (!resume_text || resume_text.length > 10000 || !job_description || job_description.length > 10000){
                 res.status(400).json({ error: 'Either Resume or Job description exceeds character limit of 10000.' });
                 return;
             }
@@ -57,7 +60,7 @@ class ResumeHandler {
     }
     static async get_resumes(req: Request, res: Response){
         try{
-            const {email} = req.body
+            const {email} = req.params
             if (!email || typeof email !== 'string' ){
                 res.status(400).json({ error: 'Invalid email.' });
                 return;
