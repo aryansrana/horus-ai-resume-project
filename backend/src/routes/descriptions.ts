@@ -3,7 +3,7 @@ import DescriptionHandler from '../handlers/descriptions';
 
 router.post('/job-description', DescriptionHandler.job_description);
 
-router.get('/job-descriptions', DescriptionHandler.get_descriptions);
+router.get('/job-descriptions/:email', DescriptionHandler.get_descriptions);
 
 router.put('/job-description', DescriptionHandler.update_name);
 

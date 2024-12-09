@@ -22,12 +22,13 @@ class DescriptionService {
     }
     static async get_descriptions(email: string) {
         try {
-            const descriptions = await Description.find({email: email}).sort({dateAdded: -1}); // -1 means reverse sorted, most recent will be on top
+            const descriptions = await Description.find({email: email}).sort({dateAdded: 1}); // -1 means reverse sorted, most recent will be on top
             return descriptions;
         } catch (error) {
             throw new Error((error as Error).message || 'Error during job description retrieval.');
         }
     }
+
     static async update_name(id: string, name: string){
         try{
             const cleanedName = name.trim();

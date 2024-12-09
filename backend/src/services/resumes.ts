@@ -91,7 +91,7 @@ class ResumeService {
     }
     static async get_resumes(email: string) {
         try {
-            const resumes = await Resume.find({email: email}).sort({dateAdded: -1}); // -1 means reverse sorted, most recent will be on top
+            const resumes = await Resume.find({email: email}).sort({dateAdded: 1}); // -1 means reverse sorted, most recent will be on top
             return resumes;
         } catch (error) {
             throw new Error((error as Error).message || 'Error during resumes retrieval.');
