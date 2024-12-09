@@ -46,16 +46,18 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
 
   const fetchResumes = useCallback(async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/resumes', 
-        { email },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getEmailFromToken}`
-          }
+      const response = await axios.get(`http://localhost:8080/api/resumes/${email}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getEmailFromToken}`
         }
-      )
+      })
 
+      if(response.status === 400){
+        toast.error('Your session has expired. Please log in again.')
+        await removeTokenCookie()
+        router.push('/login')
+      }
       setResumes(response.data.resumes)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -80,7 +82,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
 
     setUploading(true)
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('resume_file', file)
     formData.append('email', email)
 
     try {

@@ -49,17 +49,19 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
 
   const fetchJobDescriptions = useCallback(async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/job-descriptions', 
-        { email },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getEmailFromToken()}`
-          }
+      const response = await axios.get(`http://localhost:8080/api/job-descriptions/${email}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getEmailFromToken}`
         }
-      )
-
+      })
+      if(response.status === 400){
+        toast.error('Your session has expired. Please log in again.')
+        await removeTokenCookie()
+        router.push('/login')
+      }
       setJobDescriptions(response.data.descriptions)
+      
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         toast.error('Your session has expired. Please log in again.')
