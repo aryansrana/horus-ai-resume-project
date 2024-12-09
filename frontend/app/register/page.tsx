@@ -1,57 +1,19 @@
-'use client'
+import { redirect } from 'next/navigation'
+import { getEmailFromToken } from '@/utils/auth'
+import { RegisterForm } from '@/components/RegisterForm'
+import { Logo } from '@/components/Logo'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Register from '@/components/register'
-import { jwtDecode } from "jwt-decode"
-import Cookies from 'js-cookie'
+export default async function RegisterPage() {
+  const email = await getEmailFromToken()
 
-interface DecodedToken {
-  userId : string;
-  email : string;
-  username : string;
-  exp: number;
-}
-
-export default function RegisterPage() {
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
-
-  useEffect(() => {
-    const validateToken = () => {
-      const token = Cookies.get('token')
-      if (token) {
-        try {
-          const decodedToken = jwtDecode(token) as DecodedToken
-          const currentTime = Date.now() / 1000
-          if (decodedToken.exp > currentTime) {
-            // Token is valid and not expired
-            router.push('/dashboard')
-          } else {
-            // Token has expired
-            Cookies.remove('token')
-            setIsLoading(false)
-          }
-        } catch (error) {
-          console.error('Invalid token:', error)
-          Cookies.remove('token')
-          setIsLoading(false)
-        }
-      } else {
-        setIsLoading(false)
-      }
-    }
-
-    validateToken()
-  }, [router])
-
-  if (isLoading) {
-    return <div>Loading...</div>
+  if (email) {
+    redirect('/dashboard')
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <Register />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+      <Logo className="mb-8" />
+      <RegisterForm />
     </div>
   )
 }
