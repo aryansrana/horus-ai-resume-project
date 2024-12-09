@@ -2,6 +2,7 @@ import { Resume } from "../models/resumes";
 import pdfParse from 'pdf-parse';
 import mammoth from "mammoth";
 import axios from 'axios';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 class ResumeService {
     static async resume_upload(resume_file: Express.Multer.File) {
@@ -56,12 +57,19 @@ class ResumeService {
     static async get_feedback(resume_text: string, job_description: string){
         const token = process.env.HUGGINGFACE_API_KEY
         const prompt = `
-        You are an expert resume evaluator. Based on the provided job description and resume, give constructive, actionable feedback on how the resume can be improved to better match the job description. Provide at most five suggestions. Do not repeat the resume or job description in the feedback. Only give the feedback, formatted as a list of concise, actionable points. Avoid including any extra text, such as explanations or repetitions of the prompt.
+        You are an expert resume evaluator. Based on the provided job description and resume, give constructive, actionable feedback on how the resume can be improved to better match the job description. Provide at most five suggestions. Do not repeat the resume or job description in the feedback. Only give the feedback, formatted as a list of concise, actionable points. Avoid including any extra text, such as explanations or repetitions of the prompt. Return only the advice as strings.
 
         Resume: ${resume_text}
         Job Description: ${job_description}
 
         Feedback:`
+
+        const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY +"");
+
+        const model = client.getGenerativeModel({model: 'gemini-1.5-flash'});
+
+
+
         const headers = {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -76,8 +84,9 @@ class ResumeService {
         try{
             const response = await axios.post('https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2', load, {headers, timeout: 10000});
             const fitScore = response.data;
-            const response2 = await axios.post('https://api-inference.huggingface.co/models/openai-community/gpt2', { inputs: prompt }, {headers});
-            const feedback = response2.data[0].generated_text
+
+            const response2 = await model.generateContent(prompt)
+            const feedback = response2.response.text().split("\n").map(item => item.trim()).filter(item => item !== '');
             return { "fit_score": fitScore[0], "feedback": feedback};
         } catch (error) {
             if (axios.isAxiosError(error)){
