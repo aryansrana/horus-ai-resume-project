@@ -1,10 +1,7 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import multer, { FileFilterCallback } from 'multer';
-import UserHandler from '../handlers/users';
+import router from './router';
 import ResumeHandler from '../handlers/resumes';
-import DescriptionHandler from '../handlers/descriptions';
-
-const router = Router();
+import { Request, Response, NextFunction } from 'express';
+import multer, { FileFilterCallback } from 'multer';
 
 const storage = multer.memoryStorage(); // Store files in memory as Buffer
 const upload = multer({
@@ -41,6 +38,7 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 
     // Handle missing file
     if (!req.file) {
+        console.log("file not found in routes")
         res.status(400).json({
             error: 'No file uploaded.',
             status: 'error',
@@ -50,6 +48,7 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 
     // Handle invalid file type
     if (!allowedMimeTypes.includes(req.file.mimetype)) {
+        console.log("invalid type")
         res.status(400).json({
             error: 'Invalid file type. Only PDF or DOCX files are allowed.',
             status: 'error',
@@ -62,16 +61,14 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 }
 
 
-router.post('/register', UserHandler.register);
+router.post('/resume', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
 
-router.post('/login', UserHandler.login);
-
-router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
-
-router.post('/job-description', DescriptionHandler.job_description);
-
-router.get('/resume', ResumeHandler.get_resume)
+router.get('/resume', ResumeHandler.extract_resume)
 
 router.post('/analyze', ResumeHandler.analyze);
 
-export default router;
+router.get('/resumes/:email', ResumeHandler.get_resumes);
+
+router.put('/resume', ResumeHandler.update_name);
+
+router.delete('/resume', ResumeHandler.delete_name);

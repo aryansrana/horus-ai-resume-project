@@ -1,4 +1,5 @@
-### Refer to docs/SETUP.md for instructions on how to set up app locally, contact information at the very bottom
+### Refer to docs/SETUP.md for instructions on how to set up app locally
+### Contact information at the very bottom of this README.md
 
 # Project Name
 ## HorusAI

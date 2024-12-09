@@ -34,8 +34,9 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
+                .field('email', 'test@example.com')
                 .attach('resume_file', file, 'example.pdf')
-                .expect(200)
+                .expect(201)
             expect(response.body).toStrictEqual({ message: 'Resume uploaded successfully.', status: 'success' })
         });
         
@@ -45,8 +46,9 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
+                .field('email', 'test@example.com')
                 .attach('resume_file', file, 'example.docx')
-                .expect(200)
+                .expect(201)
             expect(response.body).toStrictEqual({ message: 'Resume uploaded successfully.', status: 'success' })
         });
 
@@ -56,6 +58,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
+                .field('email', 'test@example.com')
                 .attach('resume_file', Buffer.alloc(0), 'example.pdf')
                 .expect(500)
         });
@@ -66,6 +69,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
+                .field('email', 'test@example.com')
                 .attach('resume_file', file, '')
                 .expect(400)
             expect(response.body).toStrictEqual({ error: 'No file uploaded.', status: 'error' })
@@ -77,6 +81,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
+                .field('email', 'test@example.com')
                 .attach('resume_file', file, 'test.txt')
                 .expect(400)
         })
@@ -87,16 +92,23 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
+                .field('email', 'test@example.com')
                 .attach('resume_file', file, 'largeFile.pdf')
                 .expect(400)
         })
     })
 
     describe("/resume", () =>{
+
         it('extract from pdf', async () => {
+            const resume = await Resume.findOne({name: "example.pdf"});
+            if(!resume){
+                throw new Error("Resume not found.")
+            }
+            const id = resume._id;
             const response = await request(app)
                 .get(`/api/resume`).send({
-                    "resume_name": "example.pdf"
+                    "id": id
                 })
                 .expect(200)
             expect(response.body).toStrictEqual({
@@ -106,9 +118,14 @@ describe("/api", () => {
         });
 
         it('extract from docx', async () => {
+            const resume = await Resume.findOne({name: "example.docx"});
+            if(!resume){
+                throw new Error("Resume not found.")
+            }
+            const id = resume._id;
             const response = await request(app)
                 .get(`/api/resume`).send({
-                    "resume_name": "example.docx"
+                    "id": id
                 })
                 .expect(200)
             expect(response.body).toStrictEqual({
@@ -118,9 +135,10 @@ describe("/api", () => {
         });
 
         it('extract from pdf with large file', async () => {
+
             const response = await request(app)
                 .get(`/api/resume`).send({
-                    "resume_name": "largeFile.pdf"
+                    "id": "64a8bcb6203a8f56c7a3d3e7"
                 })
                 .expect(500)
             expect(response.body).toStrictEqual({ error: 'Resume not found.', status: 'error' })
@@ -131,12 +149,9 @@ describe("/api", () => {
             const response = await request(app)
                 .get(`/api/resume`)
                 .expect(400)
-                expect(response.body).toStrictEqual({ error: 'File name not given.', status: 'error' })
+                expect(response.body).toStrictEqual({ error: 'Id not given.', status: 'error' })
 
         })
         
-    })
-
-
-    
+    })    
 })
