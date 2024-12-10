@@ -59,13 +59,22 @@ class ResumeService {
 
     static async get_feedback(resume_text: string, job_description: string){
         const token = process.env.HUGGINGFACE_API_KEY
-        const prompt = `
-        You are an expert resume evaluator. Based on the provided job description and resume, give constructive, actionable feedback on how the resume can be improved to better match the job description. Provide at most five suggestions. Do not repeat the resume or job description in the feedback. Only give the feedback, formatted as a list of concise, actionable points. Avoid including any extra text, such as explanations or repetitions of the prompt. Return only the advice as strings.
+        const prompt = `You are an expert resume evaluator. Feedback should have 4-5 concise, and actionable feedback as sentences seperated by new line characters. Matching Keywords should have at most 5 words that strongly relate the Resume and Job Description.
 
         Resume: ${resume_text}
         Job Description: ${job_description}
 
-        Feedback:`
+        Feedback:
+        
+        Matching Keywords:
+        You are an expert resume evaluator. Feedback should have 4-5 concise, and actionable feedback as sentences seperated by new line characters. Matching Keywords should have at most 5 words that strongly relate the Resume and Job Description. This should always be the last item in the output.
+
+        Resume: ${resume_text}
+        Job Description: ${job_description}
+
+        Feedback:
+        
+        Matching Keywords:`
 
         const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY +"");
 
@@ -89,7 +98,9 @@ class ResumeService {
             const fitScore = response.data;
             const response2 = await model.generateContent(prompt)
             const feedback = response2.response.text().split("\n").map(item => item.trim()).filter(item => item !== '');
-            return { "fit_score": fitScore[0], "feedback": feedback};
+            const feed = feedback.slice(0, -1)
+            const keyWords = feedback[feedback.length - 1].split(' ').slice(2,)
+            return { "fit_score": fitScore[0], "feedback": feed, "matching_keywords": keyWords};
         } catch (error) {
             if (axios.isAxiosError(error)){
                 console.error(error.response?.data)
