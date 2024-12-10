@@ -78,7 +78,7 @@ class ResumeHandler {
                 }
                 const result = await ResumeService.get_feedback(resume_text, description_text);
                 console.log(result);
-                res.status(200).json({fit_score: result.fit_score, feedback: result.feedback, matching_keywords: result.matching_keywords});
+                res.status(200).json({fit_score: result.fit_score * 100, feedback: result.feedback, matching_keywords: result.matching_keywords});
 
             }
             catch(error){
