@@ -10,12 +10,12 @@ export function Logo({ className }: LogoProps) {
     <div className={cn('flex items-center space-x-2', className)}>
       <Image
         src="/images/horus.png"
-        alt="Resume Analyzer Logo"
+        alt="Horus AI Logo"
         width={40}
         height={40}
         className="rounded-md"
       />
-      <span className="font-bold text-xl">Resume Analyzer</span>
+      <span className="font-bold text-xl">Horus AI</span>
     </div>
   )
 }
