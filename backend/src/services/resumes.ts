@@ -24,7 +24,7 @@ class ResumeService {
     static async extract_text_from_resume(id: string) {
         try {
             // Retrieve resume from MongoDB
-            const resume = await Resume.findById({id});
+            const resume = await Resume.findById(id);
 
             if (!resume) {
                 throw new Error("Resume not found.");
