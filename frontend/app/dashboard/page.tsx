@@ -6,7 +6,6 @@ export default async function DashboardPage() {
   const email = await getEmailFromToken()
 
   if (!email) {
-    console.error("Not logged in.")
     redirect('/login')
   }
 

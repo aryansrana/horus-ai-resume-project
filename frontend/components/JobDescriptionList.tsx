@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { removeTokenCookie, getEmailFromToken } from '@/utils/auth'
+import { removeTokenCookie } from '@/utils/auth'
 
 interface JobDescription {
   _id: string
@@ -52,7 +52,6 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
       const response = await axios.get(`http://localhost:8080/api/job-descriptions/${email}`, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getEmailFromToken}`
         }
       })
       if(response.status === 400){
@@ -68,6 +67,7 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         await removeTokenCookie()
         router.push('/login')
       } else {
+        console.error(error);
         toast.error('Failed to fetch job descriptions')
       }
     } finally {
@@ -93,7 +93,6 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getEmailFromToken()}`
           }
         }
       )
@@ -121,7 +120,6 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         data: { id },
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getEmailFromToken()}`
         }
       })
 
@@ -147,7 +145,6 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getEmailFromToken()}`
           }
         }
       )

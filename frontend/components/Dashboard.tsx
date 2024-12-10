@@ -65,7 +65,6 @@ export default function Dashboard({ initialEmail }: DashboardProps) {
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getEmailFromToken()}`
           }
         }
       )
