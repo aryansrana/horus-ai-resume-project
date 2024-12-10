@@ -87,7 +87,6 @@ class ResumeService {
         try{
             const response = await axios.post('https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2', load, {headers, timeout: 10000});
             const fitScore = response.data;
-
             const response2 = await model.generateContent(prompt)
             const feedback = response2.response.text().split("\n").map(item => item.trim()).filter(item => item !== '');
             return { "fit_score": fitScore[0], "feedback": feedback};
