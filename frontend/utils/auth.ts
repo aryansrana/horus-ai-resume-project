@@ -33,11 +33,7 @@ export async function getEmailFromToken() {
     const email = decoded.email;
     return email;
   } catch (error) {
-    console.error('Failed to verify or decode token:', error);
-
-    // If the JWT is invalid, remove the token cookie
     await removeTokenCookie();
-
     return null; // Return null or handle the error as needed
   }
 }

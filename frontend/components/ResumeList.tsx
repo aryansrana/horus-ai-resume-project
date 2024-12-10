@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { removeTokenCookie, getEmailFromToken } from '@/utils/auth'
+import { removeTokenCookie } from '@/utils/auth'
 
 interface Resume {
   _id: string
@@ -49,7 +49,6 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
       const response = await axios.get(`http://localhost:8080/api/resumes/${email}`, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getEmailFromToken}`
         }
       })
 
@@ -89,7 +88,6 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
       await axios.post('http://localhost:8080/api/resume', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${getEmailFromToken()}`
         }
       })
 
@@ -114,7 +112,6 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         data: { id },
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getEmailFromToken()}`
         }
       })
 
@@ -140,7 +137,6 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getEmailFromToken()}`
           }
         }
       )
@@ -155,6 +151,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         await removeTokenCookie()
         router.push('/login')
       } else {
+        console.error(error)
         toast.error('Failed to rename resume')
       }
     }
