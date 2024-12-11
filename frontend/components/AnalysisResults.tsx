@@ -21,8 +21,9 @@ export default function AnalysisResults({ results, onChooseAnotherPair }: Analys
   if (!results) return null
 
   const formatKeyword = (keyword: string) => {
-    const stripped = keyword.replace(/[, ]/g, '');
-    return stripped ? stripped.charAt(0).toUpperCase() + stripped.slice(1).toLowerCase() : '';
+    if (!keyword) return ''
+    const stripped = keyword.replace(/[ ,]/g, '')
+    return stripped.length > 0 ? stripped.charAt(0).toUpperCase() + stripped.slice(1) : ''
   }
 
   const generatePDF = () => {
