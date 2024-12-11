@@ -72,12 +72,18 @@ export default function Dashboard({ initialEmail }: DashboardProps) {
       setAnalysisResults(response.data)
       setShowAnalysis(true)
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast.error('Your session has expired. Please log in again.')
-        await removeTokenCookie()
-        router.push('/login')
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          toast.error('Your session has expired. Please log in again.')
+          await removeTokenCookie()
+          router.push('/login')
+        } else {
+          // Display the error message from the response body
+          const errorMessage = error.response?.data?.error || 'An unexpected error occurred.'
+          toast.error(errorMessage)
+        }
       } else {
-        toast.error('An error occurred while analyzing. Please try again.')
+        toast.error('A network error occurred. Please try again.')
       }
     } finally {
       setIsLoading(false)
