@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 import ResumeService from '../services/resumes';
 import { Description } from '../models/descriptions';
-import multer from 'multer';
-import axios from 'axios';
 class ResumeHandler {
     static async resume_upload(req: Request, res: Response) {
         try {
-            console.log('hi')
             const resume_file = req.file;
             const { email } = req.body;
             if(!email || typeof email !== 'string'){
