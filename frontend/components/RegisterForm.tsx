@@ -43,7 +43,7 @@ export function RegisterForm() {
         })
         console.log(loginResponse.status)
         if (loginResponse.status === 200) {
-          setTokenCookie(loginResponse.data.token);
+          await setTokenCookie(loginResponse.data.token);
           router.push('/dashboard')
         } else {
           console.error('Registration successful, but login failed. Please try logging in.')
