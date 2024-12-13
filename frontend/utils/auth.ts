@@ -15,10 +15,14 @@ const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
 const key = new TextEncoder().encode(SECRET_KEY);
 
 export async function setTokenCookie(token: string) {
-  const cookieStore = cookies();
-
   try {
-    const decoded: DecodedToken = jwtDecode(token);
+    const cookieStore = cookies();
+    // Verify the JWT first (this checks the signature and expiration)
+    const { payload } = await jwtVerify(token, key);
+
+    // If verification is successful, decode the token to access the payload
+    const decoded = jwtDecode<DecodedToken>(token); // Specify the custom type here
+
     const expires = new Date(decoded.exp * 1000);
 
     cookieStore.set('token', token, {
@@ -29,7 +33,7 @@ export async function setTokenCookie(token: string) {
       expires, // Use token's exp as expiration date
     });
   } catch (error) {
-    console.error('Failed to decode token:', error);
+    console.error('Failed to verify or decode token:', error);
   }
 }
 
