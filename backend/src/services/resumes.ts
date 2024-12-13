@@ -69,7 +69,7 @@ class ResumeService {
         
         Matching Keywords:
         
-        If no job description was passed then print the string "No job description provided"
+        If no job description was passed then print only the string "No job description provided". Do not print any suggestions if this is the case.
         `
 
         const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY +"");
