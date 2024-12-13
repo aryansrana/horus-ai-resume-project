@@ -41,9 +41,10 @@ export function RegisterForm() {
           email,
           password
         })
-        console.log(loginResponse.status)
+
         if (loginResponse.status === 200) {
           await setTokenCookie(loginResponse.data.token);
+          console.log("Should redirect to dashboard")
           router.push('/dashboard')
         } else {
           console.error('Registration successful, but login failed. Please try logging in.')

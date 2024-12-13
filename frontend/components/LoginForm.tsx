@@ -28,6 +28,7 @@ export function LoginForm() {
       })
       if(response.status === 200){
         await setTokenCookie(response.data.token);
+        console.log("Should be redirecting to dashboard")
         router.push('/dashboard')
       }
     } catch (error) {
