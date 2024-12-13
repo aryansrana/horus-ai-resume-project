@@ -59,14 +59,7 @@ class ResumeService {
 
     static async get_feedback(resume_text: string, job_description: string){
         const token = process.env.HUGGINGFACE_API_KEY
-        const prompt = `You are an expert resume evaluator. Feedback should have 4-5 concise, and actionable feedback as sentences seperated by new line characters. Matching Keywords should have at most 5 words that strongly relate the Resume and Job Description.
-
-        Resume: ${resume_text}
-        Job Description: ${job_description}
-
-        Feedback:
-        
-        Matching Keywords:
+        const prompt = `
         You are an expert resume evaluator. Feedback should have 4-5 concise, and actionable feedback as sentences seperated by new line characters. Matching Keywords should have at most 5 words that strongly relate the Resume and Job Description. This should always be the last item in the output.
 
         Resume: ${resume_text}
@@ -74,7 +67,10 @@ class ResumeService {
 
         Feedback:
         
-        Matching Keywords:`
+        Matching Keywords:
+        
+        If no job description was passed then print the string "No job description provided"
+        `
 
         const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY +"");
 
@@ -97,6 +93,10 @@ class ResumeService {
             const response = await axios.post('https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2', load, {headers, timeout: 10000});
             const fitScore = response.data;
             const response2 = await model.generateContent(prompt)
+            const lst = response2.response.text().split(" ")
+            if (lst.length === 4){
+                return {message: response2.response.text(), status: "error"}
+            }
             const feedback = response2.response.text().split("\n").map(item => item.trim()).filter(item => item !== '');
             const feed = feedback.slice(0, -1)
             const keyWords = feedback[feedback.length - 1].split(' ').slice(2,)

@@ -78,8 +78,12 @@ class ResumeHandler {
                 }
                 const result = await ResumeService.get_feedback(resume_text, description_text);
                 console.log(result);
-                res.status(200).json({fit_score: result.fit_score, feedback: result.feedback, matching_keywords: result.matching_keywords});
-
+                if (result.message !== undefined){
+                    res.json({message: "No job description provided", status: "error"})
+                }
+                else{
+                    res.status(200).json({fit_score: result.fit_score, feedback: result.feedback, matching_keywords: result.matching_keywords});
+                }
             }
             catch(error){
                 res.status(500).json({ error: (error as Error).message, status: 'error' });
