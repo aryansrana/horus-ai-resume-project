@@ -59,22 +59,23 @@ class ResumeService {
 
     static async get_feedback(resume_text: string, job_description: string){
         const token = process.env.HUGGINGFACE_API_KEY
-        const prompt = `You are an expert resume evaluator. Feedback should have 4-5 concise, and actionable feedback as sentences seperated by new line characters. Matching Keywords should have at most 5 words that strongly relate the Resume and Job Description.
+        const prompt = `
+        You are an expert resume evaluator tasked to evaluate a resume against a job description. You are to provide relevant matching keywords that strongly relate the resume and job description if such keywords exist. You are also to provide concise, actionable feedback where the feedback is either categorized by "skills" or by "experience". Try to get at least 2 "skills" feedback and at least 2 "experience" feedback. Your output should only be the json formatted like this so I can run JSON.parse() on it. 
+        {
+        "matching_keywords": ["example1", "example2"],
+        "feedback": [
+            { "category": "skills", "text": "Include experience with AWS services." },
+            { "category": "experience", "text": "Add projects demonstrating REST API development." }
+        ]
+        }
 
-        Resume: ${resume_text}
-        Job Description: ${job_description}
+        This is the resume: ${resume_text}
 
-        Feedback:
+        This is the job description: ${job_description}
+        `
+
         
-        Matching Keywords:
-        You are an expert resume evaluator. Feedback should have 4-5 concise, and actionable feedback as sentences seperated by new line characters. Matching Keywords should have at most 5 words that strongly relate the Resume and Job Description. This should always be the last item in the output.
-
-        Resume: ${resume_text}
-        Job Description: ${job_description}
-
-        Feedback:
-        
-        Matching Keywords:`
+      
 
         const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY +"");
 
@@ -96,11 +97,12 @@ class ResumeService {
         try{
             const response = await axios.post('https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2', load, {headers, timeout: 10000});
             const fitScore = response.data;
-            const response2 = await model.generateContent(prompt)
-            const feedback = response2.response.text().split("\n").map(item => item.trim()).filter(item => item !== '');
-            const feed = feedback.slice(0, -1)
-            const keyWords = feedback[feedback.length - 1].split(' ').slice(2,)
-            return { "fit_score": fitScore[0], "feedback": feed, "matching_keywords": keyWords};
+            const response2 = await model.generateContent(prompt);
+            const invalidJsonString = response2.response.text()
+            const validJsonString = invalidJsonString.replace(/^[^{]*|[^}]*$/g, '');
+            const parsedData = JSON.parse(validJsonString);
+            parsedData.matching_keywords = parsedData.matching_keywords.filter((keyword: string) => keyword !== '').map((keyword: string) => keyword.charAt(0).toUpperCase() + keyword.slice(1));
+            return { fit_score: Math.floor(fitScore[0] * 100), feedback: parsedData.feedback, matching_keywords: parsedData.matching_keywords};          
         } catch (error) {
             if (axios.isAxiosError(error)){
                 console.error(error.response?.data)
