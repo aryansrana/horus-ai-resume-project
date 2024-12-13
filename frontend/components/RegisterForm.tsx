@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { setTokenCookie } from '@/utils/auth'
 
 export function RegisterForm() {
   const [email, setEmail] = useState('')
@@ -39,10 +40,10 @@ export function RegisterForm() {
         const loginResponse = await axios.post('http://localhost:8080/api/login', {
           email,
           password
-        }, { withCredentials: true })
+        })
         console.log(loginResponse.status)
         if (loginResponse.status === 200) {
-          console.log("Successfully Logged in, cookie should be there")
+          setTokenCookie(loginResponse.data.token);
           router.push('/dashboard')
         } else {
           console.error('Registration successful, but login failed. Please try logging in.')

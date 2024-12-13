@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -10,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { setTokenCookie } from '@/utils/auth'
 
 export function LoginForm() {
   const [email, setEmail] = useState('')
@@ -25,8 +25,9 @@ export function LoginForm() {
       const response = await axios.post('http://localhost:8080/api/login', {
         email,
         password,
-      }, { withCredentials: true })
+      })
       if(response.status === 200){
+        await setTokenCookie(response.data.token);
         router.push('/dashboard')
       }
     } catch (error) {
