@@ -1,3 +1,4 @@
+"use server";
 import { redirect } from 'next/navigation'
 import { getEmailFromToken } from '@/utils/auth'
 import Dashboard from '@/components/Dashboard'

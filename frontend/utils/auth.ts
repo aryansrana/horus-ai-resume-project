@@ -14,6 +14,25 @@ interface DecodedToken {
 const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
 const key = new TextEncoder().encode(SECRET_KEY);
 
+export async function setTokenCookie(token: string) {
+  const cookieStore = cookies();
+
+  try {
+    const decoded: DecodedToken = jwtDecode(token);
+    const expires = new Date(decoded.exp * 1000);
+
+    cookieStore.set('token', token, {
+      httpOnly: true, // Prevents client-side JS access
+      secure: process.env.NODE_ENV === 'production', // Secure only in production
+      path: '/', // Makes the cookie available site-wide
+      sameSite: 'strict', // Prevents CSRF attacks
+      expires, // Use token's exp as expiration date
+    });
+  } catch (error) {
+    console.error('Failed to decode token:', error);
+  }
+}
+
 export async function getEmailFromToken() {
   const cookieStore = cookies();
   const token = cookieStore.get('token');
