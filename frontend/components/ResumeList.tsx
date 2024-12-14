@@ -43,6 +43,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
   const [uploading, setUploading] = useState(false)
   const [renaming, setRenaming] = useState<string | null>(null)
   const [newName, setNewName] = useState('')
+  const [isDialogOpen, setIsDialogOpen] = useState(false) // Added state for dialog
   const router = useRouter()
 
   const fetchResumes = useCallback(async () => {
@@ -94,6 +95,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
 
       toast.success('Resume uploaded successfully')
       fetchResumes()
+      setIsDialogOpen(false)  // Close the dialog after successful upload
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         toast.error('Your session has expired. Please log in again.')
@@ -231,9 +233,9 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
             {resumes.length < 6 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Dialog>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}> {/* Updated Dialog */}
                     <DialogTrigger asChild>
-                      <Button className="w-full">
+                      <Button className="w-full" onClick={() => setIsDialogOpen(true)}> {/* Added onClick */}
                         <Upload className="mr-2 h-4 w-4" /> Upload New Resume
                       </Button>
                     </DialogTrigger>
@@ -269,3 +271,4 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
     </Card>
   )
 }
+
