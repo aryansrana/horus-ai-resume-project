@@ -12,11 +12,17 @@ import AnalysisResults from './AnalysisResults'
 import { Button } from '@/components/ui/button'
 import {removeTokenCookie, getEmailFromToken } from '@/utils/auth'
 
-interface AnalysisResults {
-  fit_score: number;
-  feedback: string[];
-  matching_keywords: string[];
+interface Feedback {
+  category: string
+  text: string
 }
+
+interface AnalysisResults {
+  fit_score: number
+  feedback: Feedback[]
+  matching_keywords: string[]
+}
+
 
 interface DashboardProps {
   initialEmail: string
