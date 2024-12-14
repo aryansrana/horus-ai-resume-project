@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import './routes/users';
 import './routes/descriptions';
 import './routes/resumes';
+import './routes/pairs';
 import router from "./routes/router";
 
 export function createApp() {

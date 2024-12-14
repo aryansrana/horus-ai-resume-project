@@ -61,11 +61,9 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 }
 
 
-router.post('/resume', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
+router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, ResumeHandler.resume_upload);
 
-router.get('/resume/:id', ResumeHandler.extract_resume)
-
-router.post('/analyze', ResumeHandler.analyze);
+router.get('/resume/:id?', ResumeHandler.extract_resume)
 
 router.get('/resumes/:email', ResumeHandler.get_resumes);
 
