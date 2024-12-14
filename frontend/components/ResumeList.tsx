@@ -176,12 +176,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
           {resumes.map((resume) => (
             <TableRow 
               key={resume._id} 
-              className={`${
-                selectedResume === resume._id 
-                  ? 'bg-[#9c8679] hover:bg-[#9c8679]' 
-                  : 'hover:bg-accent'
-              }`}
-            >
+              className={selectedResume === resume._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]'  : 'hover:bg-accent'}>
               <TableCell>
                 {renaming === resume._id ? (
                   <Input
