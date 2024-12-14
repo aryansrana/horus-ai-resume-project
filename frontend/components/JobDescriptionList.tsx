@@ -44,8 +44,10 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
   const [renaming, setRenaming] = useState<string | null>(null)
-  const [newName, setNewName] = useState('')
+  const [newName, setNewName] = useState({ value: '', length: 0 })
   const [newJobDescription, setNewJobDescription] = useState('')
+  const [charCount, setCharCount] = useState(0)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const router = useRouter()
 
   const fetchJobDescriptions = useCallback(async () => {
@@ -81,14 +83,15 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
   }, [fetchJobDescriptions])
 
   const handleAdd = async () => {
-    if (!newName || !newJobDescription) return
+    if (!newName.value || !newJobDescription) return
+    if (newName.length > 50 || newJobDescription.length > 5000) return
 
     setAdding(true)
     try {
       await axios.post('http://localhost:8080/api/job-description', 
         {
           email,
-          name: newName,
+          name: newName.value,
           job_description: newJobDescription,
         },
         {
@@ -99,9 +102,11 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
       )
 
       toast.success('Job description added successfully')
-      setNewName('')
+      setNewName({ value: '', length: 0 })
       setNewJobDescription('')
+      setCharCount(0)
       fetchJobDescriptions()
+      setIsDialogOpen(false)  // Close the dialog
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         toast.error('Your session has expired. Please log in again.')
@@ -138,11 +143,11 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
   }
 
   const handleRename = async (id: string) => {
-    if (!newName) return
+    if (!newName.value) return
 
     try {
       await axios.put('http://localhost:8080/api/job-description', 
-        { id, name: newName },
+        { id, name: newName.value },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -152,7 +157,7 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
 
       toast.success('Job description renamed successfully')
       setRenaming(null)
-      setNewName('')
+      setNewName({ value: '', length: 0 })
       fetchJobDescriptions()
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -164,6 +169,18 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
       }
     }
   }
+
+  const handleDialogClose = () => {
+    setNewName({ value: '', length: 0 })
+    setNewJobDescription('')
+    setCharCount(0)
+  }
+
+  useEffect(() => {
+    if (!adding) {
+      setCharCount(0)
+    }
+  }, [adding])
 
   if (loading) {
     return <div className="flex justify-center items-center h-64"><Loader2 className="animate-spin" /></div>
@@ -189,8 +206,8 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
                 <TableCell>
                 {renaming === jobDescription._id ? (
                   <Input
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
+                    value={newName.value}
+                    onChange={(e) => setNewName({ value: e.target.value, length: e.target.value.length })}
                     className="w-full"
                     autoFocus
                   />
@@ -216,7 +233,7 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
                         size="sm"
                         onClick={() => {
                           setRenaming(jobDescription._id)
-                          setNewName(jobDescription.name)
+                          setNewName({ value: jobDescription.name, length: jobDescription.name.length })
                         }}
                       >
                         <Pencil className="h-4 w-4" />
@@ -236,9 +253,12 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
             {jobDescriptions.length < 6 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Dialog>
+                  <Dialog open={isDialogOpen} onOpenChange={(open) => {
+                    setIsDialogOpen(open)
+                    if (!open) handleDialogClose()
+                  }}>
                     <DialogTrigger asChild>
-                      <Button className="w-full">
+                      <Button className="w-full" onClick={() => setIsDialogOpen(true)}>
                         <Plus className="mr-2 h-4 w-4" /> Add New Job Description
                       </Button>
                     </DialogTrigger>
@@ -248,17 +268,32 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
                       </DialogHeader>
                       <Input
                         placeholder="Job Description Name"
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
+                        value={newName.value}
+                        onChange={(e) => setNewName({ value: e.target.value, length: e.target.value.length })}
                         maxLength={50}
                       />
-                      <Textarea
-                        placeholder="Job Description"
-                        value={newJobDescription}
-                        onChange={(e) => setNewJobDescription(e.target.value)}
-                        maxLength={5000}
-                      />
-                      <Button onClick={handleAdd} disabled={adding}>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {newName.length}/50 characters
+                      </p>
+                      <div className="space-y-2">
+                        <Textarea
+                          placeholder="Job Description"
+                          value={newJobDescription}
+                          onChange={(e) => {
+                            const input = e.target.value
+                            setNewJobDescription(input)
+                            setCharCount(input.length)
+                          }}
+                          maxLength={5000}
+                        />
+                        <p className={`text-sm ${charCount > 5000 ? 'text-red-500' : 'text-muted-foreground'}`}>
+                          {charCount}/5000 characters
+                        </p>
+                      </div>
+                      <Button 
+                        onClick={handleAdd} 
+                        disabled={adding || newName.length > 50 || charCount > 5000 || !newName.value || !newJobDescription}
+                      >
                         {adding ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Add'}
                       </Button>
                     </DialogContent>
