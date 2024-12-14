@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { removeTokenCookie } from '@/utils/auth'
@@ -22,12 +21,6 @@ export default function Navbar({ email }: NavbarProps) {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <Logo />
-          <Link href="/" className="hover:underline">
-            Home
-          </Link>
-          <Link href="/dashboard" className="hover:underline">
-            Dashboard
-          </Link>
         </div>
         <div className="flex items-center space-x-4">
           <span>{email}</span>
