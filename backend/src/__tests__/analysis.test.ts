@@ -3,9 +3,11 @@ import { Express } from "express";
 import { createApp } from "../createApp";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import axios, {AxiosError} from "axios";
+import MockAdapter from "axios-mock-adapter"
 
 
-
+const mockAxios = new MockAdapter(axios)
 
 describe("/api", () => {
     let app : Express;
@@ -32,6 +34,50 @@ describe("/api", () => {
                 return false;
             }
         });
+    })
+
+    describe("mock test case for API endpoint", () =>{
+        it("should return a successful response", async () => {
+            const mockResponse = {
+                fit_score: "100",
+                feedback: [
+                    {
+                        category: "skills",
+                        text: "some text",
+                    },
+                ],
+                matching_keywords: [],
+            };
+    
+            const endpoint =
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateText?key=test-api-key";
+            mockAxios.onGet(endpoint).reply(200, mockResponse);
+    
+            const response = await axios.get(endpoint);
+    
+            expect(response.data).toEqual(mockResponse); // Check if the response matches the mock
+            expect(mockAxios.history.get.length).toBe(1);
+            expect(mockAxios.history.get[0].url).toBe(endpoint); 
+        });
+
+        it("error response", async () => {
+            const mockResponse = {
+                error: "Unable to process the request. Please try again later.",
+            };
+        
+            const endpoint =
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateText?key=test-api-key";
+            mockAxios.onGet(endpoint).reply(400, mockResponse);
+        
+            try {
+                await axios.get(endpoint);
+            } catch (error) {
+                const axiosErr = error as AxiosError;
+                expect(axiosErr.response?.data).toEqual(mockResponse); // Check if the error response matches the mock
+
+            }
+        });
+
     })
 
 
