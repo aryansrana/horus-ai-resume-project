@@ -174,8 +174,26 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         </TableHeader>
         <TableBody>
           {resumes.map((resume) => (
-            <TableRow key={resume._id} className={selectedResume === resume._id ? 'bg-accent' : ''}>
-              <TableCell>{resume.name}</TableCell>
+            <TableRow 
+              key={resume._id} 
+              className={`${
+                selectedResume === resume._id 
+                  ? 'bg-[#9c8679] hover:bg-[#9c8679]' 
+                  : 'hover:bg-accent'
+              }`}
+            >
+              <TableCell>
+                {renaming === resume._id ? (
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="w-full"
+                    autoFocus
+                  />
+                ) : (
+                  resume.name
+                )}
+              </TableCell>
               <TableCell>{new Date(resume.dateAdded).toLocaleDateString()}</TableCell>
               <TableCell>
                 <div className="flex space-x-2">
@@ -187,14 +205,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
                     Select
                   </Button>
                   {renaming === resume._id ? (
-                    <div className="flex space-x-2">
-                      <Input
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
-                        className="w-32"
-                      />
-                      <Button size="sm" onClick={() => handleRename(resume._id)}>Save</Button>
-                    </div>
+                    <Button size="sm" onClick={() => handleRename(resume._id)}>Save</Button>
                   ) : (
                     <Button
                       variant="outline"
@@ -258,4 +269,3 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
     </div>
   )
 }
-

@@ -24,6 +24,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { removeTokenCookie } from '@/utils/auth'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface JobDescription {
   _id: string
@@ -169,108 +170,116 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
   }
 
   return (
-    <div className="bg-card text-card-foreground rounded-lg shadow-md p-4">
-      <h2 className="text-2xl font-bold mb-4">Job Descriptions</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Date Added</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {jobDescriptions.map((jobDescription) => (
-            <TableRow key={jobDescription._id} className={selectedJobDescription === jobDescription._id ? 'bg-accent' : ''}>
-              <TableCell>{jobDescription.name}</TableCell>
-              <TableCell>{new Date(jobDescription.dateAdded).toLocaleDateString()}</TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedJobDescription(jobDescription._id)}
-                  >
-                    Select
-                  </Button>
-                  {renaming === jobDescription._id ? (
-                    <div className="flex space-x-2">
-                      <Input
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
-                        className="w-32"
-                      />
-                      <Button size="sm" onClick={() => handleRename(jobDescription._id)}>Save</Button>
-                    </div>
-                  ) : (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Job Descriptions</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Date Added</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {jobDescriptions.map((jobDescription) => (
+              <TableRow key={jobDescription._id} className={selectedJobDescription === jobDescription._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]' : 'hover:bg-accent'}>
+                <TableCell>
+                {renaming === jobDescription._id ? (
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="w-full"
+                    autoFocus
+                  />
+                ) : (
+                  jobDescription.name
+                )}
+              </TableCell>
+                <TableCell>{new Date(jobDescription.dateAdded).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => {
-                        setRenaming(jobDescription._id)
-                        setNewName(jobDescription.name)
-                      }}
+                      onClick={() => setSelectedJobDescription(jobDescription._id)}
                     >
-                      <Pencil className="h-4 w-4" />
+                      Select
                     </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(jobDescription._id)}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-          {jobDescriptions.length < 6 && (
-            <TableRow>
-              <TableCell colSpan={3}>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="w-full">
-                      <Plus className="mr-2 h-4 w-4" /> Add New Job Description
+                    {renaming === jobDescription._id ? (
+                      <Button size="sm" onClick={() => handleRename(jobDescription._id)}>Save</Button>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setRenaming(jobDescription._id)
+                          setNewName(jobDescription.name)
+                        }}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDelete(jobDescription._id)}
+                    >
+                      <Trash className="h-4 w-4" />
                     </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add New Job Description</DialogTitle>
-                    </DialogHeader>
-                    <Input
-                      placeholder="Job Description Name"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      maxLength={50}
-                    />
-                    <Textarea
-                      placeholder="Job Description"
-                      value={newJobDescription}
-                      onChange={(e) => setNewJobDescription(e.target.value)}
-                      maxLength={5000}
-                    />
-                    <Button onClick={handleAdd} disabled={adding}>
-                      {adding ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Add'}
-                    </Button>
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
-            </TableRow>
-          )}
-          {Array.from({ length: Math.max(0, 6 - jobDescriptions.length - 1) }).map((_, index) => (
-            <TableRow key={`empty-${index}`}>
-              <TableCell colSpan={3}></TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {jobDescriptions.length >= 6 && (
-        <p className="mt-2 text-sm text-muted-foreground">
-          Maximum of 6 job descriptions reached. Please delete one to add another.
-        </p>
-      )}
-    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+            {jobDescriptions.length < 6 && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="w-full">
+                        <Plus className="mr-2 h-4 w-4" /> Add New Job Description
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add New Job Description</DialogTitle>
+                      </DialogHeader>
+                      <Input
+                        placeholder="Job Description Name"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        maxLength={50}
+                      />
+                      <Textarea
+                        placeholder="Job Description"
+                        value={newJobDescription}
+                        onChange={(e) => setNewJobDescription(e.target.value)}
+                        maxLength={5000}
+                      />
+                      <Button onClick={handleAdd} disabled={adding}>
+                        {adding ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Add'}
+                      </Button>
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            )}
+            {Array.from({ length: Math.max(0, 6 - jobDescriptions.length - 1) }).map((_, index) => (
+              <TableRow key={`empty-${index}`} className="h-12">
+                <TableCell colSpan={3}></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {jobDescriptions.length >= 6 && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Maximum of 6 job descriptions reached. Please delete one to add another.
+          </p>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 
