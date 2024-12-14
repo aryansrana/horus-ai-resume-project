@@ -1,13 +1,20 @@
 'use client';
-import { useState } from 'react'
+
+import { useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import jsPDF from 'jspdf'
+
+interface Feedback {
+  category: string
+  text: string
+}
 
 interface AnalysisResults {
   fit_score: number
-  feedback: string[]
+  feedback: Feedback[]
   matching_keywords: string[]
 }
 
@@ -18,14 +25,15 @@ interface AnalysisResultsProps {
 
 export default function AnalysisResults({ results, onChooseAnotherPair }: AnalysisResultsProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [feedbackFilter, setFeedbackFilter] = useState('all')
+
+  const filteredFeedback = useMemo(() => {
+    if (!results) return []
+    if (feedbackFilter === 'all') return results.feedback
+    return results.feedback.filter(item => item.category.toLowerCase() === feedbackFilter)
+  }, [results, feedbackFilter])
 
   if (!results) return null
-
-  const formatKeyword = (keyword: string) => {
-    if (!keyword) return ''
-    const stripped = keyword.replace(/[ ,]/g, '')
-    return stripped.length > 0 ? stripped.charAt(0).toUpperCase() + stripped.slice(1) : ''
-  }
 
   const generatePDF = () => {
     setIsGeneratingPDF(true)
@@ -34,21 +42,19 @@ export default function AnalysisResults({ results, onChooseAnotherPair }: Analys
     doc.text("Resume Analysis Report", 20, 20)
     
     doc.setFontSize(12)
-    doc.text(`Fit Score: ${results.fit_score.toFixed(1)}%`, 20, 30)
+    doc.text(`Fit Score: ${results.fit_score}%`, 20, 30)
     
     doc.text("Matched Keywords:", 20, 40)
-    const formattedKeywords = results.matching_keywords.map(formatKeyword).filter(Boolean)
-    formattedKeywords.forEach((keyword, index) => {
+    results.matching_keywords.forEach((keyword, index) => {
       doc.text(`- ${keyword}`, 30, 50 + index * 10)
     })
     
-    const feedbackStartY = 50 + formattedKeywords.length * 10 + 10
+    const feedbackStartY = 50 + results.matching_keywords.length * 10 + 10
     doc.text("Feedback:", 20, feedbackStartY)
     let currentY = feedbackStartY + 10
     results.feedback.forEach((item) => {
-      const lines = doc.splitTextToSize(item, 160)
-      doc.text("- ", 30, currentY)
-      doc.text(lines, 35, currentY)
+      const lines = doc.splitTextToSize(`${item.category.toUpperCase()}: ${item.text}`, 160)
+      doc.text(lines, 30, currentY)
       currentY += lines.length * 10 + 5
     })
     
@@ -63,7 +69,7 @@ export default function AnalysisResults({ results, onChooseAnotherPair }: Analys
           <CardTitle>Fit Score</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-4xl font-bold mb-2">{results.fit_score.toFixed(1)}%</div>
+          <div className="text-4xl font-bold mb-2">{results.fit_score}%</div>
           <Progress value={results.fit_score} className="w-full" />
         </CardContent>
       </Card>
@@ -74,17 +80,11 @@ export default function AnalysisResults({ results, onChooseAnotherPair }: Analys
             <CardTitle>Keyword Matches</CardTitle>
           </CardHeader>
           <CardContent>
-            {results.matching_keywords
-              .map(formatKeyword)
-              .filter(Boolean)
-              .length > 0 ? (
+            {results.matching_keywords.length > 0 ? (
               <ul className="list-disc pl-5">
-                {results.matching_keywords
-                  .map(formatKeyword)
-                  .filter(Boolean)
-                  .map((keyword, index) => (
-                    <li key={index}>{keyword}</li>
-                  ))}
+                {results.matching_keywords.map((keyword, index) => (
+                  <li key={index}>{keyword}</li>
+                ))}
               </ul>
             ) : (
               <p className="text-muted-foreground">No matching keywords found.</p>
@@ -93,18 +93,33 @@ export default function AnalysisResults({ results, onChooseAnotherPair }: Analys
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle>Suggestions</CardTitle>
+            <Select
+              value={feedbackFilter}
+              onValueChange={(value) => setFeedbackFilter(value)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter feedback" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="skills">Skills</SelectItem>
+                <SelectItem value="experience">Experience</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
-            {results.feedback.length > 0 ? (
-              <ul className="list-disc pl-5">
-                {results.feedback.map((suggestion, index) => (
-                  <li key={index}>{suggestion}</li>
+            {filteredFeedback.length > 0 ? (
+              <ul className="list-disc pl-5 space-y-2">
+                {filteredFeedback.map((item, index) => (
+                  <li key={index}>
+                    <strong>{item.category.toUpperCase()}:</strong> {item.text}
+                  </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground">No feedback available.</p>
+              <p className="text-muted-foreground">No feedback available for the selected category.</p>
             )}
           </CardContent>
         </Card>
