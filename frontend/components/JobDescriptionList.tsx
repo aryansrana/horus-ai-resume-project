@@ -82,6 +82,10 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
 
   const handleAdd = async () => {
     if (!newName || !newJobDescription) return
+    if (newJobDescription.length > 5000) {
+      toast.error('Character count exceeds 5000')
+      return
+    }
 
     setAdding(true)
     try {
@@ -256,7 +260,6 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
                         placeholder="Job Description"
                         value={newJobDescription}
                         onChange={(e) => setNewJobDescription(e.target.value)}
-                        maxLength={5000}
                       />
                       <Button onClick={handleAdd} disabled={adding}>
                         {adding ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Add'}
