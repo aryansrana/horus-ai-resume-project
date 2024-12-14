@@ -23,6 +23,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { removeTokenCookie } from '@/utils/auth'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Resume {
   _id: string
@@ -162,105 +163,109 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
   }
 
   return (
-    <div className="bg-card text-card-foreground rounded-lg shadow-md p-4">
-      <h2 className="text-2xl font-bold mb-4">Resumes</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Date Added</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {resumes.map((resume) => (
-            <TableRow 
-              key={resume._id} 
-              className={selectedResume === resume._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]'  : 'hover:bg-accent'}>
-              <TableCell>
-                {renaming === resume._id ? (
-                  <Input
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    className="w-full"
-                    autoFocus
-                  />
-                ) : (
-                  resume.name
-                )}
-              </TableCell>
-              <TableCell>{new Date(resume.dateAdded).toLocaleDateString()}</TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedResume(resume._id)}
-                  >
-                    Select
-                  </Button>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Resumes</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Date Added</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {resumes.map((resume) => (
+              <TableRow 
+                key={resume._id} 
+                className={selectedResume === resume._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]'  : 'hover:bg-accent'}>
+                <TableCell>
                   {renaming === resume._id ? (
-                    <Button size="sm" onClick={() => handleRename(resume._id)}>Save</Button>
+                    <Input
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                      className="w-full"
+                      autoFocus
+                    />
                   ) : (
+                    resume.name
+                  )}
+                </TableCell>
+                <TableCell>{new Date(resume.dateAdded).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => {
-                        setRenaming(resume._id)
-                        setNewName(resume.name)
-                      }}
+                      onClick={() => setSelectedResume(resume._id)}
                     >
-                      <Pencil className="h-4 w-4" />
+                      Select
                     </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(resume._id)}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-          {resumes.length < 6 && (
-            <TableRow>
-              <TableCell colSpan={3}>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="w-full">
-                      <Upload className="mr-2 h-4 w-4" /> Upload New Resume
+                    {renaming === resume._id ? (
+                      <Button size="sm" onClick={() => handleRename(resume._id)}>Save</Button>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setRenaming(resume._id)
+                          setNewName(resume.name)
+                        }}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDelete(resume._id)}
+                    >
+                      <Trash className="h-4 w-4" />
                     </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Upload New Resume</DialogTitle>
-                    </DialogHeader>
-                    <Input
-                      type="file"
-                      accept=".pdf,.docx"
-                      onChange={handleUpload}
-                      disabled={uploading}
-                    />
-                    {uploading && <Loader2 className="animate-spin" />}
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
-            </TableRow>
-          )}
-          {Array.from({ length: Math.max(0, 6 - resumes.length - 1) }).map((_, index) => (
-            <TableRow key={`empty-${index}`}>
-              <TableCell colSpan={3}></TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {resumes.length >= 6 && (
-        <p className="mt-2 text-sm text-muted-foreground">
-          Maximum of 6 resumes reached. Please delete one to add another.
-        </p>
-      )}
-    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+            {resumes.length < 6 && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="w-full">
+                        <Upload className="mr-2 h-4 w-4" /> Upload New Resume
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Upload New Resume</DialogTitle>
+                      </DialogHeader>
+                      <Input
+                        type="file"
+                        accept=".pdf,.docx"
+                        onChange={handleUpload}
+                        disabled={uploading}
+                      />
+                      {uploading && <Loader2 className="animate-spin" />}
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            )}
+            {Array.from({ length: Math.max(0, 6 - resumes.length - 1) }).map((_, index) => (
+              <TableRow key={`empty-${index}`} className="h-12">
+                <TableCell colSpan={3}></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {resumes.length >= 6 && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Maximum of 6 resumes reached. Please delete one to add another.
+          </p>
+        )}
+      </CardContent>
+    </Card>
   )
 }
