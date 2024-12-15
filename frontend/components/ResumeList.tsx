@@ -66,7 +66,12 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         await removeTokenCookie()
         router.push('/login')
       } else {
-        toast.error('Failed to fetch resumes')
+        if (axios.isAxiosError(error)){
+          toast.error(error.response?.data.error)
+        }
+        else{
+          toast.error('Failed to fetch resumes')
+        }
       }
     } finally {
       setLoading(false)
@@ -102,7 +107,12 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         await removeTokenCookie()
         router.push('/login')
       } else {
-        toast.error('Failed to upload resume')
+        if (axios.isAxiosError(error)){
+          toast.error(error.response?.data.error)
+        }
+        else{
+          toast.error('Failed to upload resume')
+        }
       }
     } finally {
       setUploading(false)
@@ -126,7 +136,12 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         await removeTokenCookie()
         router.push('/login')
       } else {
-        toast.error('Failed to delete resume')
+        if (axios.isAxiosError(error)){
+          toast.error(error.response?.data.error)
+        }
+        else{
+          toast.error('Failed to delete resume')
+        }
       }
     }
   }
@@ -155,7 +170,12 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
         router.push('/login')
       } else {
         console.error(error)
-        toast.error('Failed to rename resume')
+        if (axios.isAxiosError(error)){
+          toast.error(error.response?.data.error)
+        }
+        else{
+          toast.error('Failed to upload resume')
+        }
       }
     }
   }
