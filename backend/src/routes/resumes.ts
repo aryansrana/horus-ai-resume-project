@@ -63,7 +63,7 @@ router.post('/resume-upload', upload.single('resume_file'), multerErrorHandler, 
 
 router.get('/resume/:id?', ResumeHandler.extract_resume)
 
-router.get('/resumes/:email', ResumeHandler.get_resumes);
+router.get('/resumes/:email?', ResumeHandler.get_resumes);
 
 router.put('/resume', ResumeHandler.update_name);
 
