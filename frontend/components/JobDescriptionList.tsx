@@ -205,16 +205,25 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
               <TableRow key={jobDescription._id} className={selectedJobDescription === jobDescription._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]' : 'hover:bg-accent'}>
                 <TableCell>
                 {renaming === jobDescription._id ? (
-                  <Input
-                    value={newName.value}
-                    onChange={(e) => setNewName({ value: e.target.value, length: e.target.value.length })}
-                    className="w-full"
-                    autoFocus
-                  />
+                  <>
+                    <Input
+                      value={newName.value}
+                      onChange={(e) => {
+                        const input = e.target.value.slice(0, 50);
+                        setNewName({ value: input, length: input.length });
+                      }}
+                      className="w-full"
+                      autoFocus
+                      maxLength={50}
+                    />
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {newName.length}/50 characters
+                    </p>
+                  </>
                 ) : (
                   jobDescription.name
                 )}
-              </TableCell>
+                </TableCell>
                 <TableCell>{new Date(jobDescription.dateAdded).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">

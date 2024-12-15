@@ -42,8 +42,8 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [renaming, setRenaming] = useState<string | null>(null)
-  const [newName, setNewName] = useState('')
-  const [isDialogOpen, setIsDialogOpen] = useState(false) // Added state for dialog
+  const [newName, setNewName] = useState({ value: '', length: 0 })
+  const [isDialogOpen, setIsDialogOpen] = useState(false) 
   const router = useRouter()
 
   const fetchResumes = useCallback(async () => {
@@ -95,7 +95,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
 
       toast.success('Resume uploaded successfully')
       fetchResumes()
-      setIsDialogOpen(false)  // Close the dialog after successful upload
+      setIsDialogOpen(false)  
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         toast.error('Your session has expired. Please log in again.')
@@ -132,11 +132,11 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
   }
 
   const handleRename = async (id: string) => {
-    if (!newName) return
+    if (!newName.value) return
 
     try {
       await axios.put('http://localhost:8080/api/resume', 
-        { id, name: newName },
+        { id, name: newName.value },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
 
       toast.success('Resume renamed successfully')
       setRenaming(null)
-      setNewName('')
+      setNewName({ value: '', length: 0 })
       fetchResumes()
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -185,12 +185,21 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
                 className={selectedResume === resume._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]'  : 'hover:bg-accent'}>
                 <TableCell>
                   {renaming === resume._id ? (
-                    <Input
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      className="w-full"
-                      autoFocus
-                    />
+                    <>
+                      <Input
+                        value={newName.value}
+                        onChange={(e) => {
+                          const input = e.target.value.slice(0, 50);
+                          setNewName({ value: input, length: input.length });
+                        }}
+                        className="w-full"
+                        autoFocus
+                        maxLength={50}
+                      />
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {newName.length}/50 characters
+                      </p>
+                    </>
                   ) : (
                     resume.name
                   )}
@@ -213,7 +222,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
                         size="sm"
                         onClick={() => {
                           setRenaming(resume._id)
-                          setNewName(resume.name)
+                          setNewName({ value: resume.name, length: resume.name.length })
                         }}
                       >
                         <Pencil className="h-4 w-4" />
@@ -233,9 +242,9 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
             {resumes.length < 6 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}> {/* Updated Dialog */}
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}> 
                     <DialogTrigger asChild>
-                      <Button className="w-full" onClick={() => setIsDialogOpen(true)}> {/* Added onClick */}
+                      <Button className="w-full" onClick={() => setIsDialogOpen(true)}> 
                         <Upload className="mr-2 h-4 w-4" /> Upload New Resume
                       </Button>
                     </DialogTrigger>
