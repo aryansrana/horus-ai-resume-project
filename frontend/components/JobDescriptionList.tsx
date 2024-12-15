@@ -211,8 +211,8 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Job Descriptions</CardTitle>
       </CardHeader>
-      <CardContent>
-        <Table>
+      <CardContent className="p-4">
+        <Table className="w-full">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[50]">Name</TableHead>
