@@ -3,6 +3,7 @@
 2. The fit score logic is in the get feedback api, so we didn't feel the need to make an endpoint for fit-score.
 3. The missing keyword logic is handled by Gemini in the prompt when we ask it to generate feedback.
 4. For the Download PDF Report, since the page is already client sided, it makes no sense to make an API for this. It's handled in the frontend itself.
+5. Instead of passing the resume and job description text to the apis, we instead pass the id stored in the database and extract the text from that instead.
 ### Extra Credit
 1. We used a database instead of storing locally in a dictionary.
 2. We allow the user to upload docx's for the resume, which is extra credit.

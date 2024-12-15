@@ -5,7 +5,7 @@ class AnalysisService {
     static async get_feedback(resume_text: string, job_description: string){
         const token = process.env.HUGGINGFACE_API_KEY
         const prompt = `
-        You are an expert resume evaluator tasked to evaluate a resume against a job description. You are to provide relevant matching keywords that strongly relate the resume and job description if such keywords exist. You are also to provide concise, actionable feedback where the feedback is either categorized by "skills" or by "experience". Try to get at least 2 "skills" feedback and at least 2 "experience" feedback. Your output should only be the json formatted like this so I can run JSON.parse() on it. 
+        You are an expert resume evaluator tasked to evaluate a resume against a job description. You are to provide relevant matching keywords that strongly relate the resume and job description if such keywords exist. Also find the relevant missing keywords but do not ouptut these. You are also to provide concise, actionable feedback based on these missing keywords where the feedback is either categorized by "skills" or by "experience". Try to get at least 2 "skills" feedback and at least 2 "experience" feedback. Your output should only be the json formatted like this so I can run JSON.parse() on it. 
         {
         "matching_keywords": ["example1", "example2"],
         "feedback": [
