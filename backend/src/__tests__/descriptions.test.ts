@@ -32,7 +32,7 @@ describe("/api", () => {
                 .send({
                     "email": "test@example.com",
                     "name": "SWE",
-                    "job_description": "This Job ..."
+                    "job_description": "Requires experience in early childhood development..."
                 })
                 .expect(201)
             expect(response.body).toStrictEqual({"message": "Job description submitted successfully.", "status": "success"})

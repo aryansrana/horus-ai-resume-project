@@ -18,6 +18,9 @@ class AnalysisService {
 
         This is the job description: ${job_description}
         `
+
+        const getFitScore = await AnalysisService.compare(resume_text, job_description)
+
         const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY +"");
 
         const model = client.getGenerativeModel({model: 'gemini-1.5-flash'});
@@ -41,12 +44,29 @@ class AnalysisService {
             const validJsonString = invalidJsonString.replace(/^[^{]*|[^}]*$/g, '');
             const parsedData = JSON.parse(validJsonString);
             parsedData.matching_keywords = parsedData.matching_keywords.filter((keyword: string) => keyword !== '').map((keyword: string) => keyword.charAt(0).toUpperCase() + keyword.slice(1));
-            return { fit_score: Math.floor(fitScore[0] * 100), feedback: parsedData.feedback, matching_keywords: parsedData.matching_keywords};          
+            return { fit_score: Math.floor(getFitScore.fit_score * 100), feedback: parsedData.feedback, matching_keywords: parsedData.matching_keywords};          
         } catch (error) {
             if (axios.isAxiosError(error)){
                 console.error(error.response?.data)
             }
             throw new Error((error as Error).message || 'Error during resume upload');
+        }
+    }
+
+    static async compare(resume_text: string, job_description: string){
+        try{
+            var tokenize_resume = resume_text.replace(/[^\w\s]/g, '').toLowerCase().split(/\s+/).filter(token => token.length > 0);
+        
+            var tokenize_desc = job_description.replace(/[^\w\s]/g, '').toLowerCase().split(/\s+/).filter(token => token.length > 0);
+            var c = 0;
+            for (var i = 0; i < tokenize_desc.length; i++){
+                if (tokenize_resume.includes(tokenize_desc[i])){
+                    c++
+                }
+            }
+            return { fit_score: c / tokenize_desc.length};
+        }catch(error){
+            throw new Error((error as Error).message)
         }
     }
 }
