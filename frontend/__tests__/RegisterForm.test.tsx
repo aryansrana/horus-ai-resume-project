@@ -5,11 +5,12 @@ import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { setTokenCookie } from '../utils/auth'
 
+// Mock the dependencies
+jest.mock('axios')
+jest.mock('react-hot-toast')
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
-jest.mock('axios')
-jest.mock('react-hot-toast')
 jest.mock('../utils/auth', () => ({
   setTokenCookie: jest.fn(),
 }))
@@ -20,8 +21,8 @@ describe('RegisterForm', () => {
   }
 
   beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue(mockRouter)
     jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
   })
 
   it('renders register form correctly', () => {
@@ -36,30 +37,30 @@ describe('RegisterForm', () => {
     expect(screen.getByRole('link', { name: /login/i })).toHaveAttribute('href', '/login')
   })
 
-  it('handles form submission correctly', async () => {
-    const mockToken = process.env.JWT_SECRET
+  it('submits the form successfully', async () => {
     ;(axios.post as jest.Mock).mockResolvedValueOnce({ status: 201 })
-    ;(axios.post as jest.Mock).mockResolvedValueOnce({ status: 200, data: { token: mockToken } })
+    ;(axios.post as jest.Mock).mockResolvedValueOnce({ status: 200, data: { token: 'fake-token' } })
+    ;(setTokenCookie as jest.Mock).mockResolvedValue(true)
 
     render(<RegisterForm />)
-
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } })
-    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'testuser' } })
-    fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'password123' } })
-    fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'password123' } })
-    fireEvent.click(screen.getByRole('button', { name: /register/i }))
+    
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'test@example.com' } })
+    fireEvent.change(screen.getByLabelText('Username'), { target: { value: 'testuser' } })
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'password123' } })
+    fireEvent.change(screen.getByLabelText('Confirm Password'), { target: { value: 'password123' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Register' }))
 
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/register', {
+      expect(axios.post).toHaveBeenNthCalledWith(1, 'http://localhost:8080/api/register', {
         email: 'test@example.com',
         username: 'testuser',
         password: 'password123',
       })
-      expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/login', {
+      expect(axios.post).toHaveBeenNthCalledWith(2, 'http://localhost:8080/api/login', {
         email: 'test@example.com',
         password: 'password123',
       })
-      expect(setTokenCookie).toHaveBeenCalledWith(mockToken)
+      expect(setTokenCookie).toHaveBeenCalledWith('fake-token')
       expect(mockRouter.push).toHaveBeenCalledWith('/dashboard')
     })
   })
