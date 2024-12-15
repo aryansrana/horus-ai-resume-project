@@ -52,6 +52,7 @@ export function RegisterForm() {
         if (loginResponse.status === 200) {
           const cookieSet = await setTokenCookie(loginResponse.data.token)
           if (cookieSet) {
+            window.location.reload()
             router.push('/dashboard')
           } else {
             toast.error('Failed to set authentication cookie. Please try again.')

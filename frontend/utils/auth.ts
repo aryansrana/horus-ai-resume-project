@@ -3,7 +3,6 @@ import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { redirect } from 'next/navigation';
-import toast from 'react-hot-toast';
 
 // Define your DecodedToken interface
 interface DecodedToken {
