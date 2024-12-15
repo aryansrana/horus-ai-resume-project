@@ -70,8 +70,12 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         await removeTokenCookie()
         router.push('/login')
       } else {
-        console.error(error);
-        toast.error('Failed to fetch job descriptions')
+        if(axios.isAxiosError(error)){
+          toast.error(error.response?.data.error);
+        }
+        else{
+          toast.error('Failed to fetch job descriptions');
+        }
       }
     } finally {
       setLoading(false)
@@ -113,7 +117,12 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         await removeTokenCookie()
         router.push('/login')
       } else {
-        toast.error('Failed to add job description')
+        if(axios.isAxiosError(error)){
+          toast.error(error.response?.data.error);
+        }
+        else{
+          toast.error('Failed to add job description');
+        }
       }
     } finally {
       setAdding(false)
@@ -137,7 +146,12 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         await removeTokenCookie()
         router.push('/login')
       } else {
-        toast.error('Failed to delete job description')
+        if(axios.isAxiosError(error)){
+          toast.error(error.response?.data.error);
+        }
+        else{
+          toast.error('Failed to delete job description')
+        }
       }
     }
   }
@@ -165,7 +179,13 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         await removeTokenCookie()
         router.push('/login')
       } else {
-        toast.error('Failed to rename job description')
+        if(axios.isAxiosError(error)){
+          toast.error(error.response?.data.error);
+        }
+        else{
+          toast.error('Failed to rename job description')
+        }
+        
       }
     }
   }
