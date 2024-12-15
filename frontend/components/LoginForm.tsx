@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -12,24 +13,31 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { setTokenCookie } from '@/utils/auth'
 
 export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
-        email,
-        password,
-      })
-      if(response.status === 200){
-        await setTokenCookie(response.data.token);
-        console.log("Should be redirecting to dashboard")
-        router.push('/dashboard')
+      const response = await axios.post('http://localhost:8080/api/login', formData)
+      if (response.status === 200) {
+        const cookieSet = await setTokenCookie(response.data.token)
+        if (cookieSet) {
+          router.push('/dashboard')
+        } else {
+          toast.error('Failed to set authentication cookie. Please try again.')
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -54,10 +62,11 @@ export function LoginForm() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -65,10 +74,11 @@ export function LoginForm() {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
                 required
               />
             </div>

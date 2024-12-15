@@ -2,6 +2,8 @@
 import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
+import { redirect } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 // Define your DecodedToken interface
 interface DecodedToken {
@@ -21,19 +23,23 @@ export async function setTokenCookie(token: string) {
     const { payload } = await jwtVerify(token, key);
 
     // If verification is successful, decode the token to access the payload
-    const decoded = jwtDecode<DecodedToken>(token); // Specify the custom type here
+    const decoded = jwtDecode<DecodedToken>(token);
 
     const expires = new Date(decoded.exp * 1000);
 
     cookieStore.set('token', token, {
-      httpOnly: true, // Prevents client-side JS access
-      secure: process.env.NODE_ENV === 'production', // Secure only in production
-      path: '/', // Makes the cookie available site-wide
-      sameSite: 'strict', // Prevents CSRF attacks
-      expires, // Use token's exp as expiration date
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      sameSite: 'strict',
+      expires,
     });
+
+    // Return true to indicate successful cookie setting
+    return true;
   } catch (error) {
     console.error('Failed to verify or decode token:', error);
+    return false;
   }
 }
 
@@ -64,5 +70,5 @@ export async function getEmailFromToken() {
 // Remove Token Cookie
 export async function removeTokenCookie() {
   cookies().delete('token');
-  return;
+  redirect('/login');
 }
