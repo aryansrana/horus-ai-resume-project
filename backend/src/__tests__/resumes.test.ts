@@ -34,7 +34,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
-                .field('email', 'test@example.com')
+                .field('email', 'test@gmail.com')
                 .attach('resume_file', file, 'example.pdf')
                 .expect(201)
             expect(response.body).toStrictEqual({ message: 'Resume uploaded successfully.', status: 'success' })
@@ -46,7 +46,7 @@ describe("/api", () => {
             const response = await request(app)
                 .post('/api/resume-upload')
                 .set('Content-Type', 'multipart/form-data')
-                .field('email', 'test@example.com')
+                .field('email', 'test1@example.com')
                 .attach('resume_file', file, 'example.docx')
                 .expect(201)
             expect(response.body).toStrictEqual({ message: 'Resume uploaded successfully.', status: 'success' })
@@ -106,7 +106,6 @@ describe("/api", () => {
                 throw new Error("Resume not found.")
             }
             const id = resume._id;
-            console.log(id)
             const response = await request(app)
                 .get(`/api/resume/${id}`)
                 .expect(200)
@@ -146,8 +145,142 @@ describe("/api", () => {
                 .get(`/api/resume/${id}`)
                 .expect(400)
             expect(response.body).toStrictEqual({ error: 'Id not given.', status: 'error' })
-
         })
+    })
+    
+    describe("/resumes/:email", ()=>{
+        it ('get_resumes test 1', async ()=>{
+            const email = "test@gmail.com"
+            const response = await request(app)
+                .get(`/api/resumes/${email}`)
+                .expect(200)
+            expect(response.body.count).toStrictEqual(1)
+        })
+
+        it ('get_resumes test 2', async ()=>{
+            const email = "test@hotmail.com"
+            const response = await request(app)
+                .get(`/api/resumes/${email}`)
+                .expect(200)
+            expect(response.body).toStrictEqual({"count": 0, "resumes": []})
+        })
+
+        it ('get_resumes test 3. Invalid email', async ()=>{
+            const email = ""
+            const response = await request(app)
+                .get(`/api/resumes/${email}`)
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Invalid email.' })
+        })
+    })
         
-    })    
+    describe( "PUT /resume", () =>{
+        it ('update_name test 1 - correct', async () =>{
+            const resume = await Resume.findOne({name: "example.pdf"});
+            if(!resume){
+                throw new Error("Resume not found.")
+            }
+            const id = resume._id;
+            var newName = "Changed name"
+
+            const response = await request(app)
+                .put('/api/resume')
+                .send({id: id, name: newName})
+                .expect(200)
+            expect(response.body).toStrictEqual({ status: 'success', message: 'Resume\'s name updated successfully.' })
+
+            // change name back to original 
+            newName = "example.pdf"
+            const response2 = await request(app)
+                .put('/api/resume')
+                .send({id: id, name: newName})
+                .expect(200)
+            expect(response2.body).toStrictEqual({ status: 'success', message: 'Resume\'s name updated successfully.' })
+        })
+
+        it ('update_name test 2 - invalid. Longer than 50 chars', async () =>{
+            const resume = await Resume.findOne({name: "example.pdf"});
+            if(!resume){
+                throw new Error("Resume not found.")
+            }
+            const id = resume._id;
+            const newName = "Changed name that is more characters than fifty which is too long to be accepted"
+
+            const response = await request(app)
+                .put('/api/resume')
+                .send({id: id, name: newName})
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Name is too long.' })
+        })
+
+        it ('update_name test 3 - invalid. Missing id', async () =>{
+    
+            const id = "";
+            const newName = "Acceptable"
+
+            const response = await request(app)
+                .put('/api/resume')
+                .send({id: id, name: newName})
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Invalid ID.' })
+        })
+
+        it ('update_name test 4 - invalid. Not a string', async () =>{
+            const resume = await Resume.findOne({name: "example.pdf"});
+            if(!resume){
+                throw new Error("Resume not found.")
+            }
+            const id = resume._id;
+            const newName = ""
+
+            const response = await request(app)
+                .put('/api/resume')
+                .send({id: id, name: newName})
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Invalid name.' })
+        })
+    })
+        
+    describe("Delete /resume", ()=>{
+        it ('delete_name test 1 - Valid', async() =>{
+            const resume = await Resume.findOne({name: "example.docx"});
+            if(!resume){
+                throw new Error("Resume not found.")
+            }
+            const id = resume._id;
+            const response = await request(app)
+                .delete('/api/resume')
+                .send({id: id})
+                .expect(200)
+            expect(response.body).toStrictEqual({ status: 'success', message: 'Resume deleted successfully.' })
+
+            // check if it was deleted
+
+            const email = "test1@example.com"
+            const response2 = await request(app)
+                .get(`/api/resumes/${email}`)
+                .expect(200)
+            expect(response2.body.count).toStrictEqual(0)
+             
+        })
+
+        it ('delete_name test 2 - Invalid. Bad id', async () =>{
+            const id = "";
+            const response = await request(app)
+                .delete('/api/resume')
+                .send({id: id})
+                .expect(400)
+            expect(response.body).toStrictEqual({ error: 'Invalid ID.' })
+        })
+
+        it ('delete_name test 3 - Invalid. No resume', async () =>{
+            const id = "675b76ad8a9e4eaeeeeeeeee"; // id does not match any entry
+            const response = await request(app)
+                .delete('/api/resume')
+                .send({id: id})
+                .expect(400)
+            expect(response.body).toStrictEqual({ status: 'error', message: 'Resume not found.'})
+        })
+    })
+     
 })
