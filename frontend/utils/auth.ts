@@ -31,7 +31,7 @@ export async function setTokenCookie(token: string) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       path: '/',
-      sameSite: 'strict',
+      sameSite: 'lax',
       expires,
     });
 

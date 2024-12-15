@@ -18,11 +18,20 @@ export function LoginForm() {
     password: '',
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [isEmailValid, setIsEmailValid] = useState(true)
   const router = useRouter()
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+    if (name === 'email') {
+      setIsEmailValid(validateEmail(value))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,6 +77,7 @@ export function LoginForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                className={!isEmailValid && formData.email !== '' ? 'border-red-500' : ''}
               />
             </div>
             <div className="flex flex-col space-y-1.5">
@@ -83,7 +93,11 @@ export function LoginForm() {
               />
             </div>
           </div>
-          <Button className="w-full mt-4" type="submit" disabled={isLoading}>
+          <Button 
+            className="w-full mt-4" 
+            type="submit" 
+            disabled={isLoading || !isEmailValid || formData.email === ''}
+          >
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Log in
           </Button>
