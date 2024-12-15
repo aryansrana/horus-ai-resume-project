@@ -55,4 +55,4 @@ npm run build
 npm run start
 ```
 ## Step 6: Use app
-Open your browser and navigate to `http://localhost:3000` to view the application.
+Open your browser and navigate to `http://localhost:3000` to view the application. When the site is running, if you have an issue with the login or register buttons please refresh the page, this is due to an issue with the nextjs router.
