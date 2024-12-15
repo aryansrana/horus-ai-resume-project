@@ -248,6 +248,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
                         accept=".pdf,.docx"
                         onChange={handleUpload}
                         disabled={uploading}
+                        data-testid="file-input"
                       />
                       {uploading && <Loader2 className="animate-spin" />}
                     </DialogContent>

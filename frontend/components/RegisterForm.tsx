@@ -116,7 +116,7 @@ export function RegisterForm() {
               />
             </div>
           </div>
-          <Button className="w-full mt-4" type="submit" disabled={isLoading || password !== confirmPassword}>
+          <Button className="w-full mt-4" type="submit" disabled={isLoading}>
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Register
           </Button>
