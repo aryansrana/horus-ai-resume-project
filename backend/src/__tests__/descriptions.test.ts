@@ -5,9 +5,6 @@ import {Description} from "../models/descriptions"
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-
-
-
 describe("/api", () => {
     let app : Express;
     beforeAll(() => {

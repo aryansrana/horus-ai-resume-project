@@ -8,12 +8,10 @@ class ResumeHandler {
             const { email } = req.body;
             if(!email || typeof email !== 'string'){
                 res.status(400).json({ error: 'Invalid email.' });
-                console.log("email not found")
                 return;
             }
             if (!resume_file) {
                 res.status(400).json({ error: 'No file uploaded.', status: 'error' });
-                console.log("resume_file not found");
                 return;
             }
             const result = await ResumeService.resume_upload(email, resume_file);
@@ -53,7 +51,6 @@ class ResumeHandler {
             return;
         }
         catch(error){
-            console.error(error);
             res.status(500).json({ error: (error as Error).message, status: 'error' });
             return;
         }
@@ -79,7 +76,6 @@ class ResumeHandler {
             return;
         }
         catch(error){
-            console.error(error);
             res.status(500).json({ error: (error as Error).message, status: 'error' });
             return;
         }   
@@ -96,7 +92,6 @@ class ResumeHandler {
             return;
         }
         catch(error){
-            console.error(error);
             res.status(500).json({ error: (error as Error).message, status: 'error' });
             return;
         }   

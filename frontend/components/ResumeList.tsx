@@ -87,7 +87,7 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
     formData.append('email', email)
 
     try {
-      await axios.post('http://localhost:8080/api/resume', formData, {
+      await axios.post('http://localhost:8080/api/resume-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }

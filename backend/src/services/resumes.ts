@@ -49,7 +49,6 @@ class ResumeService {
 
             throw new Error("Unsupported file type.");
         } catch (error) {
-            console.log(error)
             throw new Error((error as Error).message || "Error during resume text extraction");
             
         }
