@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
@@ -13,16 +13,23 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { setTokenCookie } from '@/utils/auth'
 
 export function RegisterForm() {
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  })
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match')
       return
     }
@@ -31,21 +38,24 @@ export function RegisterForm() {
 
     try {
       const registerResponse = await axios.post('http://localhost:8080/api/register', {
-        email,
-        username,
-        password
+        email: formData.email,
+        username: formData.username,
+        password: formData.password
       })
 
       if (registerResponse.status === 201) {
         const loginResponse = await axios.post('http://localhost:8080/api/login', {
-          email,
-          password
+          email: formData.email,
+          password: formData.password
         })
 
         if (loginResponse.status === 200) {
-          await setTokenCookie(loginResponse.data.token);
-          console.log("Should redirect to dashboard")
-          router.push('/dashboard')
+          const cookieSet = await setTokenCookie(loginResponse.data.token)
+          if (cookieSet) {
+            router.push('/dashboard')
+          } else {
+            toast.error('Failed to set authentication cookie. Please try again.')
+          }
         } else {
           console.error('Registration successful, but login failed. Please try logging in.')
           toast.error('Registration successful, but login failed. Please try logging in.')
@@ -63,6 +73,8 @@ export function RegisterForm() {
     }
   }
 
+  const isPasswordMatch = formData.password === formData.confirmPassword
+
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -75,10 +87,11 @@ export function RegisterForm() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -86,10 +99,11 @@ export function RegisterForm() {
               <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
+                name="username"
                 type="text"
                 placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={formData.username}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -97,10 +111,11 @@ export function RegisterForm() {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -108,15 +123,16 @@ export function RegisterForm() {
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
+                name="confirmPassword"
                 type="password"
                 placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 required
               />
             </div>
           </div>
-          <Button className="w-full mt-4" type="submit" disabled={isLoading || password !== confirmPassword}>
+          <Button className="w-full mt-4" type="submit" disabled={isLoading || !isPasswordMatch}>
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Register
           </Button>
