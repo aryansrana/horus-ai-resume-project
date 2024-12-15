@@ -10,9 +10,11 @@ class AnalysisHandler{
             const {resume_id, description_id} = req.body
             if(!resume_id){
                 res.status(400).json({ error: 'Resume Id not given.', status: 'error' })
+                return;
             }
             if(!description_id){
                 res.status(400).json({ error: 'Job Description Id not given.', status: 'error' })
+                return;
             }
 
             try{
@@ -59,9 +61,11 @@ class AnalysisHandler{
             const {resume_id, description_id} = req.body
             if(!resume_id){
                 res.status(400).json({ error: 'Resume Id not given.', status: 'error' })
+                return;
             }
             if(!description_id){
                 res.status(400).json({ error: 'Job Description Id not given.', status: 'error' })
+                return;
             }
             try{
                 const resume_text = await ResumeService.extract_text_from_resume(resume_id);
@@ -89,6 +93,7 @@ class AnalysisHandler{
                 }
                 const result = await AnalysisService.compare(resume_text, description_text);
                 res.status(200).json({fit_score: result.fit_score});
+                return;
             }
             catch(error){
                 res.status(500).json({ error: (error as Error).message, status: 'error' });
