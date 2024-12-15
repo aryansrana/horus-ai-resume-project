@@ -165,17 +165,17 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
   }
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Resumes</CardTitle>
       </CardHeader>
-      <CardContent>
-        <Table>
+      <CardContent className="p-4">
+        <Table className="w-full">
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Date Added</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="w-[50%]">Name</TableHead>
+              <TableHead className="w-[15%]">Date Added</TableHead>
+              <TableHead className="w-[35%]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -183,9 +183,10 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
               <TableRow 
                 key={resume._id} 
                 className={selectedResume === resume._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]'  : 'hover:bg-accent'}>
-                <TableCell>
+                <TableCell className="max-w-[200px]">
+                <div className="flex items-center space-x-2">
                   {renaming === resume._id ? (
-                    <>
+                    <div className="w-full">
                       <Input
                         value={newName.value}
                         onChange={(e) => {
@@ -199,14 +200,17 @@ export default function ResumeList({ email, selectedResume, setSelectedResume }:
                       <p className="text-sm text-muted-foreground mt-1">
                         {newName.length}/50 characters
                       </p>
-                    </>
+                    </div>
                   ) : (
-                    resume.name
+                    <div className="w-full truncate" title={resume.name}>
+                      {resume.name}
+                    </div>
                   )}
+                </div>
                 </TableCell>
-                <TableCell>{new Date(resume.dateAdded).toLocaleDateString()}</TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
+                <TableCell className="py-2">{new Date(resume.dateAdded).toLocaleDateString()}</TableCell>
+                <TableCell className="py-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button
                       variant="outline"
                       size="sm"

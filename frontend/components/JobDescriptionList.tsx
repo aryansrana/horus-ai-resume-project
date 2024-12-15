@@ -195,38 +195,42 @@ export default function JobDescriptionList({ email, selectedJobDescription, setS
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Date Added</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="w-[50]">Name</TableHead>
+              <TableHead className="w-[15%]">Date Added</TableHead>
+              <TableHead className="w-[35%]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {jobDescriptions.map((jobDescription) => (
               <TableRow key={jobDescription._id} className={selectedJobDescription === jobDescription._id ? 'bg-[#9c8679]/50 hover:bg-[#9c8679]' : 'hover:bg-accent'}>
-                <TableCell>
-                {renaming === jobDescription._id ? (
-                  <>
-                    <Input
-                      value={newName.value}
-                      onChange={(e) => {
-                        const input = e.target.value.slice(0, 50);
-                        setNewName({ value: input, length: input.length });
-                      }}
-                      className="w-full"
-                      autoFocus
-                      maxLength={50}
-                    />
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {newName.length}/50 characters
-                    </p>
-                  </>
-                ) : (
-                  jobDescription.name
-                )}
+                <TableCell className="max-w-[200px]">
+                <div className="flex items-center space-x-2">
+                  {renaming === jobDescription._id ? (
+                    <div className="w-full">
+                      <Input
+                        value={newName.value}
+                        onChange={(e) => {
+                          const input = e.target.value.slice(0, 50);
+                          setNewName({ value: input, length: input.length });
+                        }}
+                        className="w-full"
+                        autoFocus
+                        maxLength={50}
+                      />
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {newName.length}/50 characters
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="w-full truncate" title={jobDescription.name}>
+                      {jobDescription.name}
+                    </div>
+                  )}
+                </div>
                 </TableCell>
-                <TableCell>{new Date(jobDescription.dateAdded).toLocaleDateString()}</TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
+                <TableCell className="py-2">{new Date(jobDescription.dateAdded).toLocaleDateString()}</TableCell>
+                <TableCell className="py-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button
                       variant="outline"
                       size="sm"
