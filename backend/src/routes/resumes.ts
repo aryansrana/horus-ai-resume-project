@@ -38,7 +38,6 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 
     // Handle missing file
     if (!req.file) {
-        console.log("file not found in routes")
         res.status(400).json({
             error: 'No file uploaded.',
             status: 'error',
@@ -48,7 +47,6 @@ function multerErrorHandler(err: Error, req: Request, res: Response, next: NextF
 
     // Handle invalid file type
     if (!allowedMimeTypes.includes(req.file.mimetype)) {
-        console.log("invalid type")
         res.status(400).json({
             error: 'Invalid file type. Only PDF or DOCX files are allowed.',
             status: 'error',
