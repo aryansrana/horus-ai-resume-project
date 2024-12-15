@@ -1,5 +1,5 @@
 ### Discrepencies
-1. (VERY IMPORTANT) The Next JS router is a bit buggy when working in localhost. Sometimes, the router might not redirect. To fix this, just refresh the page and it should route properly.
+1. We jerry rigged a fix for routing issues. It should be resolved now but if you try login in or registering and (nothing happens/page crashes), just refresh the page.
 2. The fit score logic is in the get feedback api, so we didn't feel the need to make an endpoint for fit-score.
 3. The missing keyword logic is handled by Gemini in the prompt when we ask it to generate feedback.
 4. For the Download PDF Report, since the page is already client sided, it makes no sense to make an API for this. It's handled in the frontend itself.
