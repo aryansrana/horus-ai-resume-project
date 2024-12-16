@@ -1,0 +1,396 @@
+openapi: 3.0.0
+info:
+  title: Resume and Job Description API
+  version: 1.0.0
+  description: API for managing resumes, job descriptions, user authentication, and analysis
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /job-description:
+    post:
+      summary: Submit a job description
+      tags:
+        - Job Descriptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                job_description:
+                  type: string
+      responses:
+        '200':
+          description: Job description submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+    put:
+      summary: Update job description name
+      tags:
+        - Job Descriptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Job description name updated successfully
+    delete:
+      summary: Delete a job description
+      tags:
+        - Job Descriptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+      responses:
+        '200':
+          description: Job description deleted successfully
+
+  /job-descriptions/{email}:
+    get:
+      summary: Get job descriptions for a user
+      tags:
+        - Job Descriptions
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of job descriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobDescription'
+
+  /analyze:
+    post:
+      summary: Analyze resume against job description
+      tags:
+        - Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resume_id:
+                  type: string
+                job_description_id:
+                  type: string
+      responses:
+        '200':
+          description: Analysis completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analysis'
+
+  /comparison:
+    post:
+      summary: Compare multiple resumes against a job description
+      tags:
+        - Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resume_ids:
+                  type: array
+                  items:
+                    type: string
+                job_description_id:
+                  type: string
+      responses:
+        '200':
+          description: Comparison completed successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Analysis'
+
+  /resume-upload:
+    post:
+      summary: Upload a resume
+      tags:
+        - Resumes
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                resume_file:
+                  type: string
+                  format: binary
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Resume uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+        '400':
+          description: Bad request (file size exceeded or invalid file type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  status:
+                    type: string
+
+  /resume/{id}:
+    get:
+      summary: Extract resume text
+      tags:
+        - Resumes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resume text extracted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+
+  /resumes/{email}:
+    get:
+      summary: Get resumes for a user
+      tags:
+        - Resumes
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of resumes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resume'
+
+  /resume:
+    put:
+      summary: Update resume name
+      tags:
+        - Resumes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Resume name updated successfully
+    delete:
+      summary: Delete a resume
+      tags:
+        - Resumes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+      responses:
+        '200':
+          description: Resume deleted successfully
+
+  /register:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /login:
+    post:
+      summary: User login
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+
+components:
+  schemas:
+    Resume:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        contentType:
+          type: string
+        dateAdded:
+          type: string
+          format: date-time
+
+    JobDescription:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        job_description:
+          type: string
+        dateAdded:
+          type: string
+          format: date-time
+
+    Analysis:
+      type: object
+      properties:
+        resume_id:
+          type: string
+        job_description_id:
+          type: string
+        score:
+          type: number
+        feedback:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+              text:
+                type: string
+        matching_keywords:
+          type: array
+          items:
+            type: string
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+security:
+  - BearerAuth: []
