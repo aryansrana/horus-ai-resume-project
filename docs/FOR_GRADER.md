@@ -17,3 +17,5 @@
 ### End 2 End Tests
 1. In horus-ai-resume-project, run npm i -> npm run start. Make sure you have Docker Setup open.
 2. Open a new terminal and run npm run e2etest
+3. Select E2E Testing
+4. Scroll all the way down to find app.cy.js and select it.
