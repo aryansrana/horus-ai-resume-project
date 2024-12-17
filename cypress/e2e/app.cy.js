@@ -56,9 +56,12 @@ cy.get('tr') // Same logic for the job description
   .find('button') // Find all buttons within that row
   .contains('Select') // Find the "Select" button specifically
   .click();
-    
+    cy.intercept('POST', 'http:/localhost:8080/api/analyze').as('analyze')
     // Step 9: Analyze the uploaded files and entered job description
     cy.contains('Analyze').click()
+    cy.wait('@analyze').then((interception) => {
+      expect(interception.response.statusCode).to.eq(200);
+    });
     // Step 10: Verify that analysis results are displayed
     cy.contains('Fit Score').should('be.visible')
     cy.contains('Keyword Matches').should('be.visible')
