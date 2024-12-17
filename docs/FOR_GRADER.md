@@ -15,5 +15,5 @@
 ### Unit Tests
 1. In order to run unit tests, simply run "npm run test" after you've ran "npm i" and then "npm run build" in the backend/frontend directory
 ### End 2 End Tests
-1. In horus-ai-resume-project, run npm i -> npm run start
+1. In horus-ai-resume-project, run npm i -> npm run start. Make sure you have Docker Setup open.
 2. Open a new terminal and run npm run e2etest
