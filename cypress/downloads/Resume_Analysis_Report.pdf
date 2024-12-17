@@ -1,0 +1,401 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 3255
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 16 Tf
+18.3999999999999986 TL
+0 g
+56.6929133858267775 785.1970866141732586 Td
+(Resume Analysis Report) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 756.8506299212598378 Td
+(Fit Score: 45%) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 728.5041732283464171 Td
+(Matched Keywords:) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 700.15771653543311 Td
+(- Python) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 671.8112598425196893 Td
+(- TensorFlow) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 643.4648031496062686 Td
+(- Keras) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 615.1183464566928478 Td
+(- Numpy) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 586.7718897637794271 Td
+(- Matplotlib) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 558.42543307086612 Td
+(- Scikit-learn) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 530.0789763779526993 Td
+(- Pandas) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 501.7325196850393354 Td
+(- Data Science) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 473.3860629921259147 Td
+(- Machine Learning) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 445.0396062992125508 Td
+(- Artificial Neural Network) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 416.69314960629913 Td
+(- ANN) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 388.3466929133857661 Td
+(- Model training) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 360.0002362204724022 Td
+(- Model performance) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 331.6537795275589815 Td
+(- Data analysis) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 303.3073228346455608 Td
+(- Data visualization) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+56.6929133858267775 246.614409448818833 Td
+(Feedback:) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 218.2679527559054122 Td
+(SKILLS: Highlight proficiency in specific AI/ML algorithms beyond neural networks) Tj
+T* (\(e.g., regression, classification, clustering\).  The resume showcases project work, but) Tj
+T* (explicitly stating algorithm expertise will strengthen the application.) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 119.0553543307086102 Td
+(SKILLS: Add cloud platform experience \(AWS, Azure, GCP\) relevant to deploying and) Tj
+T* (scaling machine learning models.  Mention specific services used, if any.) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 48.1892125984251152 Td
+(EXPERIENCE: Quantify achievements in projects. Instead of 'Built and trained an) Tj
+T* (ANN...', try 'Developed an ANN achieving 95% accuracy on the Fashion MNIST) Tj
+T* (dataset...'  Add specific metrics wherever possible.) Tj
+ET
+BT
+/F1 12 Tf
+13.7999999999999989 TL
+0 g
+85.0393700787401627 -51.0233858267718006 Td
+(EXPERIENCE: Showcase more substantial projects that directly relate to AI/ML roles.) Tj
+T* (Consider adding personal projects or contributions to open-source projects in this) Tj
+T* (field.) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R ]
+/Count 1
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+6 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+/F3 7 0 R
+/F4 8 0 R
+/F5 9 0 R
+/F6 10 0 R
+/F7 11 0 R
+/F8 12 0 R
+/F9 13 0 R
+/F10 14 0 R
+/F11 15 0 R
+/F12 16 0 R
+/F13 17 0 R
+/F14 18 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+19 0 obj
+<<
+/Producer (jsPDF 2.5.2)
+/CreationDate (D:20241216192300-05'00')
+>>
+endobj
+20 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 21
+0000000000 65535 f 
+0000003459 00000 n 
+0000005276 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000003516 00000 n 
+0000003641 00000 n 
+0000003771 00000 n 
+0000003904 00000 n 
+0000004041 00000 n 
+0000004164 00000 n 
+0000004293 00000 n 
+0000004425 00000 n 
+0000004561 00000 n 
+0000004689 00000 n 
+0000004816 00000 n 
+0000004945 00000 n 
+0000005078 00000 n 
+0000005180 00000 n 
+0000005524 00000 n 
+0000005610 00000 n 
+trailer
+<<
+/Size 21
+/Root 20 0 R
+/Info 19 0 R
+/ID [ <1D2E59E731E8E83A0F987F68262364BF> <1D2E59E731E8E83A0F987F68262364BF> ]
+>>
+startxref
+5714
+%%EOF
