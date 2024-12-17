@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "cypress": "^13.16.1",
+    "cypress-file-upload": "^5.0.8"
+  },
+  "scripts": {
+    "e2etest": "cypress open",
+    "start": "docker-compose up --build"
+  }
+}
